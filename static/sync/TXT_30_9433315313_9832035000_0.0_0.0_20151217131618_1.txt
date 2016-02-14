@@ -1,0 +1,2 @@
+Victims: Dead: 5
+Victims: Orphans: 2
