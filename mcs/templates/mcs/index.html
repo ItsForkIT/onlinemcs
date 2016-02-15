@@ -70,11 +70,11 @@
                             <h3>General</h3>
                             <ul class="nav side-menu">
                                 <li><a href="index.html"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
-                                <li><a href="sync.html"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
+                                <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
-                                        <li><a href="graphical.html">Graphical</a>
+                                        <li><a href="/analysis/graphical">Graphical</a>
                                         </li>
                                         <li><a href="tables.html">Tabular</a>
                                         </li>
@@ -115,28 +115,28 @@
                         <div class="left"></div>
                         <div class="right">
                             <span class="count_top"><i class="fa fa-file"></i> Total Files in DB</span>
-                            <div class="count blue">2500</div>
+                            <div class="count blue">{{ countAllFiles }}</div>
                         </div>
                     </div>
                     <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
                         <div class="left"></div>
                         <div class="right">
                             <span class="count_top"><i class="fa fa-camera"></i> Total Photos</span>
-                            <div class="count green">100</div>
+                            <div class="count green">{{ countIMG }}</div>
                         </div>
                     </div>
                     <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
                         <div class="left"></div>
                         <div class="right">
                             <span class="count_top"><i class="fa fa-video-camera"></i> Total Videos</span>
-                            <div class="count red">240</div>
+                            <div class="count red">{{ countVID }}</div>
                         </div>
                     </div>
                     <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
                         <div class="left"></div>
                         <div class="right">
                             <span class="count_top"><i class="fa fa-file-text-o"></i> Total SMS</span>
-                            <div class="count purple">300</div>
+                            <div class="count purple">{{ countSMS }}</div>
                             
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                         <div class="left"></div>
                         <div class="right">
                             <span class="count_top"><i class="fa fa-file-text"></i> Total Text</span>
-                            <div class="count dark">2,315</div>
+                            <div class="count dark">{{ countTXT }}</div>
                            
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                         <div class="left"></div>
                         <div class="right">
                             <span class="count_top"><i class="fa fa-music"></i> Total Audio</span>
-                            <div class="count aero">722</div>
+                            <div class="count aero">{{ countAUD }}</div>
                         </div>
                     </div>
 

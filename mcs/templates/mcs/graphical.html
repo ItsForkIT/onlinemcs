@@ -1,3 +1,4 @@
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,17 +13,17 @@
 
     <!-- Bootstrap core CSS -->
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 
-    <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="{% static "fonts/css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/animate.min.css" %}" rel="stylesheet">
 
     <!-- Custom styling plus plugins -->
-    <link href="css/custom.css" rel="stylesheet">
-    <link href="css/icheck/flat/green.css" rel="stylesheet">
+    <link href="{% static "css/custom.css" %}" rel="stylesheet">
+    <link href="{% static "css/icheck/flat/green.css" %}" rel="stylesheet">
 
 
-    <script src="js/jquery.min.js"></script>
+    <script src="{% static "js/jquery.min.js" %}"></script>
 
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -48,7 +49,7 @@
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>MCS Dashboard</span></a>
+                        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>MCS Dashboard</span></a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -64,11 +65,11 @@
                             <h3>General</h3>
                             <ul class="nav side-menu">
                                 <li><a href="index.html"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
-                                <li><a href="sync.html"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
+                                <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
-                                        <li><a href="graphical.html">Graphical</a>
+                                        <li><a href="/analysis/graphical">Graphical</a>
                                         </li>
                                         <li><a href="tables.html">Tabular</a>
                                         </li>
@@ -371,22 +372,22 @@
         <div id="notif-group" class="tabbed_notifications"></div>
     </div>
 
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
 
     <!-- chart js -->
-    <script src="js/chartjs/chart.min.js"></script>
+    <script src="{% static "js/chartjs/chart.min.js" %}"></script>
     <!-- bootstrap progress js -->
-    <script src="js/progressbar/bootstrap-progressbar.min.js"></script>
-    <script src="js/nicescroll/jquery.nicescroll.min.js"></script>
+    <script src="{% static "js/progressbar/bootstrap-progressbar.min.js" %}"></script>
+    <script src="{% static "js/nicescroll/jquery.nicescroll.min.js" %}"></script>
     <!-- icheck -->
-    <script src="js/icheck/icheck.min.js"></script>
+    <script src="{% static "js/icheck/icheck.min.js" %}"></script>
 
-    <script src="js/custom.js"></script>
+    <script src="{% static "js/custom.js" %}"></script>
 
     <!-- moris js -->
-    <script src="js/moris/raphael-min.js"></script>
-    <script src="js/moris/morris.js"></script>
-    <script src="js/moris/example.js"></script>
+    <script src="{% static "js/moris/raphael-min.js" %}"></script>
+    <script src="{% static "js/moris/morris.js" %}"></script>
+    <script src="{% static "js/moris/example.js" %}"></script>
 
 </body>
 
