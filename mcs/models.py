@@ -46,6 +46,6 @@ class Areas(models.Model):
     File = models.ForeignKey(Files)
 
 
-class SMS(models.Model):
+class UnstructuredTXT(models.Model):
     Content = models.TextField()
     File = models.ForeignKey(Files)
