@@ -4,8 +4,21 @@ from .models import *
 import glob
 from os import path
 from datetime import datetime
+from textblob import TextBlob
 
 RELATIVE_PATH_TO_SYNC = "../sync/*"
+
+
+def insertToSpecificTable(filePath, fileType, fileModelObj):
+    if(fileType == 'SMS'):
+        fileObj = open(filePath, 'r')
+        message = str(fileObj.read())
+        sentiment = TextBlob(message).sentiment.polarity
+        uTxtObj = UnstructuredTXT(Content=message, File=fileModelObj,
+                                  SentimentPolarity=sentiment)
+        uTxtObj.save()
+        return 1
+    return 1
 
 
 def extractFileInfo(fileName):
@@ -34,7 +47,8 @@ def checkAndInsert(filePath):
                   lat=FileInfo['lat'],
                   DateTime=FileInfo['datetime'])
         f.save()
-        return 1
+        if(insertToSpecificTable(filePath, FileInfo['type'], f)):
+            return 1
     return 0
 
 # Create your views here.

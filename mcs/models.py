@@ -49,3 +49,8 @@ class Areas(models.Model):
 class UnstructuredTXT(models.Model):
     Content = models.TextField()
     File = models.ForeignKey(Files)
+    SentimentPolarity = models.FloatField()
+
+    def __str__(self):
+        return (self.File.__str__() + " | SentimentPolarity: " +
+                str(self.SentimentPolarity))
