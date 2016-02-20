@@ -54,11 +54,11 @@
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>MCS Dashboard</span></a>
+                        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>MCS Dashboard</span></a>
                     </div>
                     <div class="clearfix"></div>
 
-                    
+                                        
                     <!-- /menu prile quick info -->
 
                     <br />
@@ -69,14 +69,23 @@
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li><a href="index.html"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
+                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
                                 <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="/analysis/graphical">Graphical</a>
                                         </li>
-                                        <li><a href="tables.html">Tabular</a>
+                                        <li><a href="/analysis/tables">Tabular</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                <li><a><i class="fa fa-desktop"></i> File Viewer <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu" style="display: none">
+                                        <li><a href="/filemanager/imageView">Images</a>
+                                        </li>
+                                        <li><a href="/filemanager/videoView">Video</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -192,7 +201,15 @@
                                         <p>Audio Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
+                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ audioDistribution }}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p>Image Files</p>
+                                        <div class="">
+                                            <div class="progress progress_sm" style="width: 76%;">
+                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ imageDistribution }}></div>
                                             </div>
                                         </div>
                                     </div>
@@ -200,7 +217,7 @@
                                         <p>Video Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{videoDistribution}}></div>
                                             </div>
                                         </div>
                                     </div>
@@ -210,7 +227,7 @@
                                         <p>SMS Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40"></div>
+                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ smsDistribution }}></div>
                                             </div>
                                         </div>
                                     </div>
@@ -218,7 +235,7 @@
                                         <p>TXT Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{txtDistribution}}></div>
                                             </div>
                                         </div>
                                     </div>
