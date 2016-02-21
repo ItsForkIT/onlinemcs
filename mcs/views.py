@@ -62,13 +62,18 @@ def index(request):
     context['countSMS'] = Files.objects.filter(Type='SMS').count()
     context['countTXT'] = Files.objects.filter(Type='TXT').count()
     context['countAUD'] = Files.objects.filter(Type='AUD').count()
-  
+
     if context['countAllFiles'] > 0:
-        context['audioDistribution'] = (context['countAUD']*100)/context['countAllFiles']
-        context['smsDistribution'] = (context['countSMS']*100)/context['countAllFiles']
-        context['imageDistribution'] = (context['countIMG']*100)/context['countAllFiles']
-        context['txtDistribution'] = (context['countTXT']*100)/context['countAllFiles']
-        context['videoDistribution'] = (context['countVID']*100)/context['countAllFiles']
+        context['audioDistribution'] = (
+            context['countAUD'] * 100) / context['countAllFiles']
+        context['smsDistribution'] = (
+            context['countSMS'] * 100) / context['countAllFiles']
+        context['imageDistribution'] = (
+            context['countIMG'] * 100) / context['countAllFiles']
+        context['txtDistribution'] = (
+            context['countTXT'] * 100) / context['countAllFiles']
+        context['videoDistribution'] = (
+            context['countVID'] * 100) / context['countAllFiles']
 
     context['listIMG'] = Files.objects.filter(Type='IMG')
     return render(request, 'mcs/index.html', context)
@@ -95,32 +100,40 @@ def graphicalAnalysis(request):
     context['years'] = list()
     for years in context['DateTime']:
         val1 = str(years)
-        print val1
+        print(val1)
         context['years'].append(val1[:4])
-   
-    if context['countAllFiles'] > 0:
-        context['audioDistribution'] = (context['countAUD']*100)/context['countAllFiles']
-        context['smsDistribution'] = (context['countSMS']*100)/context['countAllFiles']
-        context['imageDistribution'] = (context['countIMG']*100)/context['countAllFiles']
-        context['txtDistribution'] = (context['countTXT']*100)/context['countAllFiles']
-        context['videoDistribution'] = (context['countVID']*100)/context['countAllFiles']
 
-        context['countYears'] = {i:context['years'].count(i) for i in context['years']}
-        print context['countYears']
+    if context['countAllFiles'] > 0:
+        context['audioDistribution'] = ((context['countAUD'] * 100) /
+                                        context['countAllFiles'])
+        context['smsDistribution'] = ((context['countSMS'] * 100) /
+                                      context['countAllFiles'])
+        context['imageDistribution'] = ((context['countIMG'] * 100) /
+                                        context['countAllFiles'])
+        context['txtDistribution'] = ((context['countTXT'] * 100) /
+                                      context['countAllFiles'])
+        context['videoDistribution'] = ((context['countVID'] * 100) /
+                                        context['countAllFiles'])
+
+        context['countYears'] = {
+            i: context['years'].count(i) for i in context['years']}
+        print(context['countYears'])
 
     return render(request, 'mcs/graphical.html', context)
+
 
 def tabularAnalysis(request):
     return render(request, 'mcs/tables.html', {})
 
+
 def imageView(request):
     context = {}
     context['imgList'] = Files.objects.filter(Type='IMG')
-    
     return render(request, 'mcs/images.html', context)
+
 
 def videoView(request):
     context = {}
     context['vidList'] = Files.objects.filter(Type='VID')
-    print context['vidList']
+    print(context['vidList'])
     return render(request, 'mcs/videos.html', context)
