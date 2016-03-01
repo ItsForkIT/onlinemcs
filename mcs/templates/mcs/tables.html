@@ -316,20 +316,30 @@
                                         <tbody>
                                             <tr>
                                                 <th scope="row">1</th>
-                                                <td>AUD</td>
-                                                <td>12</td>
+                                                <td>AUDIOS</td>
+                                                <td>{{countAUD}}</td>
                                             </tr>
 
                                             <tr>
                                                 <th scope="row">2</th>
-                                                <td>VID</td>
-                                                <td>2</td>
+                                                <td>VIDEOS</td>
+                                                <td>{{countVID}}</td>
                                             </tr>
 
                                             <tr>
                                                 <th scope="row">3</th>
-                                                <td>TXT</td>
-                                                <td>65</td>
+                                                <td>TEXTS</td>
+                                                <td>{{countTXT}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">3</th>
+                                                <td>SMS</td>
+                                                <td>{{countSMS}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">3</th>
+                                                <td>IMAGES</td>
+                                                <td>{{countIMG}}</td>
                                             </tr>
                                             
                                         </tbody>
@@ -357,30 +367,18 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
                                                 <th>Time to Live</th>
                                                 <th>Number</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>02</td>
-                                                <td>1</td>
-                                            </tr>
+                                        {% for key,values in TtlFinalVal.items %}
 
                                             <tr>
-                                                <th scope="row">2</th>
-                                                <td>03</td>
-                                                <td>2</td>
+                                                <td>{{key}}</td>
+                                                <td>{{values}}</td>
                                             </tr>
-
-                                            <tr>
-                                                <th scope="row">3</th>
-                                                <td>32</td>
-                                                <td>6</td>
-                                            </tr>
-                                            
+                                        {% endfor %}
                                         </tbody>
                                     </table>
 

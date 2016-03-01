@@ -11,6 +11,7 @@ class Files(models.Model):
     lon = models.FloatField()
     lat = models.FloatField()
     DateTime = models.DateTimeField(db_index=True)
+    Ttl = models.CharField(max_length=255)
 
     def __str__(self):
         return self.Name

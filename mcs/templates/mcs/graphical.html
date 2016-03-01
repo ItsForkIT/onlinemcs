@@ -115,7 +115,7 @@
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Line Graph of Year Wise Distribution</h2>
+                                    <h2>Line Graph of Files Distribution</h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -494,23 +494,62 @@ Morris.Bar({
             }
         });
 
-        new Morris.Line({
-            element: 'graph_line',
-            xkey: 'year',
-            ykeys: ['value'],
-            labels: ['Value'],
-            hideHover: 'auto',
-            lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            data: [
-            {% for key,values in countYears.items %}
-                {year: '{{key}}', value: '{{values}}'},
-           	{% endfor %}
-           
-            ]
-        });
+		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+		Morris.Line({
+		  element: 'graph_line',
+		  data: [
+	  	  {% for key,values in countYears.items %}
+		        {m: '{{key}}',a: '{{values}}'},
+           
+		   // m: '{{key}}', // <-- valid timestamp strings
+		   // a: '{{values}}',
+	      {% endfor %}
+          
+		  ],
+		  xkey: 'm',
+		  ykeys: ['a'],
+		  labels: ['Files:'],
+		  lineColors: ['#26B99A'],
+		  xLabelFormat: function(x) { // <--- x.getMonth() returns valid index
+		    var month = months[x.getMonth()];
+		    return month;
+		  },
+		  dateFormat: function(x) {
+		    var month = months[new Date(x).getMonth()];
+		    return month;
+		  },
+		});
+
+
+		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+		Morris.Line({
+		  element: 'graph_line1',
+		  data: [
+	  	  {% for key,values in countYears.items %}
+		        {m: '{{key}}',a: '{{values}}'},
+           
+		   // m: '{{key}}', // <-- valid timestamp strings
+		   // a: '{{values}}',
+	      {% endfor %}
+          
+		  ],
+		  xkey: 'm',
+		  ykeys: ['a'],
+		  labels: ['Files:'],
+		  lineColors: ['#26B99A'],
+		  xLabelFormat: function(x) { // <--- x.getMonth() returns valid index
+		    var month = months[x.getMonth()];
+		    return month;
+		  },
+		  dateFormat: function(x) {
+		    var month = months[new Date(x).getMonth()];
+		    return month;
+		  },
+		});
         new Morris.Line({
-            element: 'graph_line1',
+            element: 'graph_line12',
             xkey: 'year',
             ykeys: ['value'],
             labels: ['Value'],

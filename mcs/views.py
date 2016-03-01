@@ -10,117 +10,166 @@ RELATIVE_PATH_TO_SYNC = "../sync/*"
 
 
 def insertToSpecificTable(filePath, fileType, fileModelObj):
-    if(fileType == 'SMS'):
-        fileObj = open(filePath, 'r')
-        message = str(fileObj.read())
-        sentiment = TextBlob(message).sentiment.polarity
-        uTxtObj = UnstructuredTXT(Content=message, File=fileModelObj,
-                                  SentimentPolarity=sentiment)
-        uTxtObj.save()
-        return 1
-    return 1
+	if(fileType == 'SMS'):
+		fileObj = open(filePath, 'r')
+		message = str(fileObj.read())
+		sentiment = TextBlob(message).sentiment.polarity
+		uTxtObj = UnstructuredTXT(Content=message, File=fileModelObj,
+								  SentimentPolarity=sentiment)
+		uTxtObj.save()
+		return 1
+	if(fileType == 'TXT'):
+		fileObj = open(filePath, 'r')
+		message = str(fileObj.read())
+		messageSplit = message.split(':')
+
+		if(messageSplit[0] == 'Health'):
+			strTxtObj = Health(Type=messageSplit[0],Quantity=messageSplit[2],File=fileModelObj)
+			strTxtObj.save()
+		if(messageSplit[0] == 'Shelter'):
+			strTxtObj = Shelter(Type=messageSplit[0],Quantity=messageSplit[2], File=fileModelObj)
+			strTxtObj.save()    	
+		
+		if(messageSplit[0] == 'Food'):
+			strTxtObj = Food(Type=messageSplit[0],Quantity=messageSplit[2], File=fileModelObj)
+			strTxtObj.save()
+		
+		if(messageSplit[0] == 'Areas'):
+			strTxtObj = Food(Type=messageSplit[0],Quantity=messageSplit[2], File=fileModelObj)
+			strTxtObj.save()
+		
+	return 1
 
 
 def extractFileInfo(fileName):
-    info = fileName.split("_")
-    fileInfo = {}
-    fileInfo['type'] = info[0]
-    fileInfo['ttl'] = info[1]
-    fileInfo['source'] = info[2]
-    fileInfo['destination'] = info[3]
-    fileInfo['lat'] = info[4]
-    fileInfo['long'] = info[5]
-    fileInfo['datetime'] = datetime.strptime(info[6], '%Y%m%d%H%M%S')
-    fileInfo['groupId'] = info[7].split(".")[0]
-    return fileInfo
+	info = fileName.split("_")
+	fileInfo = {}
+	fileInfo['type'] = info[0]
+	fileInfo['ttl'] = info[1]
+	fileInfo['source'] = info[2]
+	fileInfo['destination'] = info[3]
+	fileInfo['lat'] = info[4]
+	fileInfo['long'] = info[5]
+	fileInfo['datetime'] = datetime.strptime(info[6], '%Y%m%d%H%M%S')
+	fileInfo['groupId'] = info[7].split(".")[0]
+	return fileInfo
 
 
 def checkAndInsert(filePath):
-    fileName = path.basename(filePath)
-    if(not Files.objects.filter(Name=fileName).exists()):
-        FileInfo = extractFileInfo(fileName)
-        size = path.getsize(filePath)
-        f = Files(Name=fileName, Type=FileInfo['type'], Size=size,
-                  Source=FileInfo['source'],
-                  Destination=FileInfo['destination'],
-                  lon=FileInfo['long'],
-                  lat=FileInfo['lat'],
-                  DateTime=FileInfo['datetime'])
-        f.save()
-        if(insertToSpecificTable(filePath, FileInfo['type'], f)):
-            return 1
-    return 0
+	fileName = path.basename(filePath)
+	if(not Files.objects.filter(Name=fileName).exists()):
+		FileInfo = extractFileInfo(fileName)
+		size = path.getsize(filePath)
+		f = Files(Name=fileName, Type=FileInfo['type'], Size=size,
+				  Source=FileInfo['source'],
+				  Destination=FileInfo['destination'],
+				  lon=FileInfo['long'],
+				  lat=FileInfo['lat'],
+				  DateTime=FileInfo['datetime'], Ttl=FileInfo['ttl'])
+		f.save()
+		if(insertToSpecificTable(filePath, FileInfo['type'], f)):
+			return 1
+	return 0
 
 # Create your views here.
 
 
 def index(request):
-    context = {}
-    context['countAllFiles'] = Files.objects.all().count()
-    context['countIMG'] = Files.objects.filter(Type='IMG').count()
-    context['countVID'] = Files.objects.filter(Type='VID').count()
-    context['countSMS'] = Files.objects.filter(Type='SMS').count()
-    context['countTXT'] = Files.objects.filter(Type='TXT').count()
-    context['countAUD'] = Files.objects.filter(Type='AUD').count()
+	context = {}
+	context['countAllFiles'] = Files.objects.all().count()
+	context['countIMG'] = Files.objects.filter(Type='IMG').count()
+	context['countVID'] = Files.objects.filter(Type='VID').count()
+	context['countSMS'] = Files.objects.filter(Type='SMS').count()
+	context['countTXT'] = Files.objects.filter(Type='TXT').count()
+	context['countAUD'] = Files.objects.filter(Type='AUD').count()
   
-    if context['countAllFiles'] > 0:
-        context['audioDistribution'] = (context['countAUD']*100)/context['countAllFiles']
-        context['smsDistribution'] = (context['countSMS']*100)/context['countAllFiles']
-        context['imageDistribution'] = (context['countIMG']*100)/context['countAllFiles']
-        context['txtDistribution'] = (context['countTXT']*100)/context['countAllFiles']
-        context['videoDistribution'] = (context['countVID']*100)/context['countAllFiles']
+	
+	if context['countAllFiles'] > 0:
+		context['audioDistribution'] = (
+			context['countAUD'] * 100) / context['countAllFiles']
+		context['smsDistribution'] = (
+			context['countSMS'] * 100) / context['countAllFiles']
+		context['imageDistribution'] = (
+			context['countIMG'] * 100) / context['countAllFiles']
+		context['txtDistribution'] = (
+			context['countTXT'] * 100) / context['countAllFiles']
+		context['videoDistribution'] = (
+			context['countVID'] * 100) / context['countAllFiles']
 
-    context['listIMG'] = Files.objects.filter(Type='IMG')
-    return render(request, 'mcs/index.html', context)
-
+	context['listIMG'] = Files.objects.filter(Type='IMG')
+	return render(request, 'mcs/index.html', context)
 
 def sync(request):
-    allFilePaths = glob.glob(RELATIVE_PATH_TO_SYNC)
-    i = 0
-    for filePath in allFilePaths:
-        i += checkAndInsert(filePath)
-    print(str(i) + " Files inserted")
-    return redirect(index)
+	allFilePaths = glob.glob(RELATIVE_PATH_TO_SYNC)
+	i = 0
+	for filePath in allFilePaths:
+		i += checkAndInsert(filePath)
+	print(str(i) + " Files inserted")
+	return redirect(index)
 
 
 def graphicalAnalysis(request):
-    context = {}
-    context['countAllFiles'] = Files.objects.all().count()
-    context['countIMG'] = Files.objects.filter(Type='IMG').count()
-    context['countVID'] = Files.objects.filter(Type='VID').count()
-    context['countSMS'] = Files.objects.filter(Type='SMS').count()
-    context['countTXT'] = Files.objects.filter(Type='TXT').count()
-    context['countAUD'] = Files.objects.filter(Type='AUD').count()
-    context['DateTime'] = Files.objects.values_list('DateTime', flat=True)
-    context['years'] = list()
-    for years in context['DateTime']:
-        val1 = str(years)
-        print val1
-        context['years'].append(val1[:4])
-   
-    if context['countAllFiles'] > 0:
-        context['audioDistribution'] = (context['countAUD']*100)/context['countAllFiles']
-        context['smsDistribution'] = (context['countSMS']*100)/context['countAllFiles']
-        context['imageDistribution'] = (context['countIMG']*100)/context['countAllFiles']
-        context['txtDistribution'] = (context['countTXT']*100)/context['countAllFiles']
-        context['videoDistribution'] = (context['countVID']*100)/context['countAllFiles']
+	context = {}
+	context['countAllFiles'] = Files.objects.all().count()
+	context['countIMG'] = Files.objects.filter(Type='IMG').count()
+	context['countVID'] = Files.objects.filter(Type='VID').count()
+	context['countSMS'] = Files.objects.filter(Type='SMS').count()
+	context['countTXT'] = Files.objects.filter(Type='TXT').count()
+	context['countAUD'] = Files.objects.filter(Type='AUD').count()
+	context['DateTime'] = Files.objects.values_list('DateTime', flat=True)
+	context['years'] = list()
+	for years in context['DateTime']:
+		val1 = str(years)
+		
+		context['years'].append(val1[:7])
+		#print(context['years'])
 
-        context['countYears'] = {i:context['years'].count(i) for i in context['years']}
-        print context['countYears']
+	if context['countAllFiles'] > 0:
+		context['audioDistribution'] = ((context['countAUD'] * 100) /
+										context['countAllFiles'])
+		context['smsDistribution'] = ((context['countSMS'] * 100) /
+									  context['countAllFiles'])
+		context['imageDistribution'] = ((context['countIMG'] * 100) /
+										context['countAllFiles'])
+		context['txtDistribution'] = ((context['countTXT'] * 100) /
+									  context['countAllFiles'])
+		context['videoDistribution'] = ((context['countVID'] * 100) /
+										context['countAllFiles'])
 
-    return render(request, 'mcs/graphical.html', context)
+		context['countYears'] = {i:context['years'].count(i) for i in context['years']}
+		print(context['countYears'])
+
+	return render(request, 'mcs/graphical.html', context)
 
 def tabularAnalysis(request):
-    return render(request, 'mcs/tables.html', {})
+	context = {}
+	context['countAllFiles'] = Files.objects.all().count()
+	context['countIMG'] = Files.objects.filter(Type='IMG').count()
+	context['countVID'] = Files.objects.filter(Type='VID').count()
+	context['countSMS'] = Files.objects.filter(Type='SMS').count()
+	context['countTXT'] = Files.objects.filter(Type='TXT').count()
+	context['countAUD'] = Files.objects.filter(Type='AUD').count()
+
+	context['Ttl'] = Files.objects.values_list('Ttl', flat=True)
+	context['TtlVal'] = list()
+	for years in context['Ttl']:       
+		val1 = str(years) 
+		context['TtlVal'].append(val1)
+	
+
+	context['TtlFinalVal'] = {j:context['TtlVal'].count(j) for j in context['TtlVal']}
+	print(context['TtlFinalVal'])
+   
+	return render(request, 'mcs/tables.html', context)
 
 def imageView(request):
-    context = {}
-    context['imgList'] = Files.objects.filter(Type='IMG')
-    
-    return render(request, 'mcs/images.html', context)
+	context = {}
+	context['imgList'] = Files.objects.filter(Type='IMG')
+	
+	return render(request, 'mcs/images.html', context)
 
 def videoView(request):
-    context = {}
-    context['vidList'] = Files.objects.filter(Type='VID')
-    print context['vidList']
-    return render(request, 'mcs/videos.html', context)
+	context = {}
+	context['vidList'] = Files.objects.filter(Type='VID')
+	print(context['vidList'])
+	return render(request, 'mcs/videos.html', context)
