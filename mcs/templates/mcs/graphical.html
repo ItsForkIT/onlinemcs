@@ -53,7 +53,7 @@
                     </div>
                     <div class="clearfix"></div>
 
-                    
+                                        
                     <!-- /menu prile quick info -->
 
                     <br />
@@ -64,14 +64,23 @@
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li><a href="index.html"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
+                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
                                 <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="/analysis/graphical">Graphical</a>
                                         </li>
-                                        <li><a href="tables.html">Tabular</a>
+                                        <li><a href="/analysis/tables">Tabular</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                <li><a><i class="fa fa-desktop"></i> File Viewer <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu" style="display: none">
+                                        <li><a href="/filemanager/imageView">Images</a>
+                                        </li>
+                                        <li><a href="/filemanager/videoView">Video</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -81,7 +90,6 @@
                         
                     </div>
                     <!-- /sidebar menu -->
-
                    
                     <!-- /sidebar menu -->
 
@@ -115,7 +123,9 @@
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Line Graph of Files Distribution</h2>
+                                    <h2>Line Graph of Files Distribution
+                                          
+                                    </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -408,9 +418,10 @@
     Morris.Bar({
         element: 'graph_bar',
         data: [
-            {device: 'Dal', Quantity: 136},
-            {device: 'Rice', Quantity: 137},
-        ],
+           {% for key,values in FoodData.items %}
+                {device: '{{key}}',Quantity: '{{values}}'},
+          {% endfor %}
+          ],
         xkey: 'device',
         ykeys: ['Quantity'],
         labels: ['QUantity'],
@@ -422,9 +433,10 @@
     Morris.Bar({
         element: 'graph_bar1',
         data: [
-            {device: 'Jaundice', Quantity: 20},
-            {device: 'Stomach Upset', Quantity: 137},
-        ],
+          {% for key,values in HealthData.items %}
+                {device: '{{key}}',Quantity: '{{values}}'},
+          {% endfor %}
+          ],
         xkey: 'device',
         ykeys: ['Quantity'],
         labels: ['Quantity'],
@@ -436,8 +448,9 @@
 Morris.Bar({
         element: 'graph_bar2',
         data: [
-            {device: 'Dead', Quantity: 75},
-            {device: 'Orphans', Quantity: 25},
+           {% for key,values in VictimData.items %}
+                {device: '{{key}}',Quantity: '{{values}}'},
+          {% endfor %}
         ],
         xkey: 'device',
         ykeys: ['Quantity'],
@@ -485,8 +498,9 @@ Morris.Bar({
         Morris.Donut({
             element: 'graph_donut1',
             data: [
-                {label: 'Dead', value: 75},
-                {label: 'Orphans', value: 25}
+               {% for key,values in VictimData.items %}
+                    {label: '{{key}}',value: '{{values}}'},
+              {% endfor %}
             ],
             colors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
             formatter: function (y) {
@@ -501,10 +515,7 @@ Morris.Bar({
 		  data: [
 	  	  {% for key,values in countYears.items %}
 		        {m: '{{key}}',a: '{{values}}'},
-           
-		   // m: '{{key}}', // <-- valid timestamp strings
-		   // a: '{{values}}',
-	      {% endfor %}
+          {% endfor %}
           
 		  ],
 		  xkey: 'm',

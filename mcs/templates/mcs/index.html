@@ -26,6 +26,19 @@
 
     <script src="{% static "js/jquery.min.js" %}"></script>
     <script src="{% static "js/nprogress.js" %}"></script>
+    <!-- Offline Map Start -->
+    <!-- leaflet -->
+    <link rel="stylesheet" href="{% static "css/leaflet.css" %}" />
+    <script src="{% static "js/leaflet.js" %}"></script>
+
+    <!-- Main tangram library -->
+    <script src="{% static "js/tangram.min.js" %}"></script>
+
+ 
+    <!-- Offline Map Start -->
+
+
+
     <script>
         NProgress.start();
     </script>
@@ -185,10 +198,7 @@
                             </div>
 
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <div id="placeholder33" style="height: 260px; display: none" class="demo-placeholder"></div>
-                                <div style="width: 100%;">
-                                    <div id="canvas_dahs" class="demo-placeholder" style="width: 100%; height:270px;"></div>
-                                </div>
+                                    <div id="map"></div>
                             </div>
                             <div class="col-md-3 col-sm-3 col-xs-12 bg-white">
                                 <div class="x_title">
@@ -595,6 +605,29 @@
     <script>
         NProgress.done();
     </script>
+
+       <!-- Map setup -->
+    <script>
+      
+        var map = L.map('map');
+
+        var layer = Tangram.leafletLayer({
+            scene: "{% static "map/scene.yaml"%}",
+            attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors | <a href="https://mapzen.com/" target="_blank">Mapzen</a>'
+        });
+
+        layer.addTo(map);
+
+        map.setView([23.5350475, 87.3380425], 13);
+        
+        {% for i,j in  latlong %}
+        var marker = L.marker([{{ i }}, {{ j }}]).addTo(map);
+        {% endfor %}
+
+    </script>
+
+
+
     <!-- /datepicker -->
     <!-- /footer content -->
 </body>

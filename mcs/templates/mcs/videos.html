@@ -161,19 +161,12 @@
                                     <div class="row  gallery clearfix">
                                     {% for i in vidList %}
                                            {% static "" as baseURL %}
-                                        <div class="col-md-55" >
-                                            <!--    <a href={{baseURL}}/sync/{{i}} rel="prettyPhoto[gallery2]"><img style="width: 100%; display: block;" src={{baseURL}}/sync/{{i}}/></a>
-                                                -->
+                                        <div class="col-md-55">
                                               <video class="video" width="320" height="240" id="videoId" controls>
                                                   <source src={{baseURL}}/sync/{{i}} type="video/mp4">
 
                                                 Your browser does not support the video tag.
                                                 </video>
-                                            <!--    echo '<video class="video" width="320" height="240" poster="images/video-camera-icon.png" controls preload="none">';
-                                        echo '<source src="sync/'.$cdTitle.'" type="video/mp4">';
-                                        echo $cdTitle;
-                                        echo '<source src="sync/'.$cdTitle.'" type="video/webm">';
-                                        echo '</video>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                                          -->
                                         </div>
                                          

@@ -6343,3 +6343,9 @@ ul.notifications {
     float: right;
     opacity: 1;
 }
+
+#map {
+            height: 35em;
+            width: 100%;
+            margin: 0 auto;
+        }
