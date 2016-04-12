@@ -100,6 +100,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+SYNC_URL = os.path.abspath(BASE_DIR + "/../sync/")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/

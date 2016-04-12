@@ -58,6 +58,7 @@
 
                     <br />
 
+                    
                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 
@@ -90,6 +91,8 @@
                         
                     </div>
                     <!-- /sidebar menu -->
+
+                   
                    
                     <!-- /sidebar menu -->
 
@@ -498,7 +501,7 @@ Morris.Bar({
         Morris.Donut({
             element: 'graph_donut1',
             data: [
-               {% for key,values in VictimData.items %}
+               {% for key,values in VictimDataPerc.items %}
                     {label: '{{key}}',value: '{{values}}'},
               {% endfor %}
             ],

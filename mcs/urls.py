@@ -8,6 +8,6 @@ urlpatterns = [
     url(r'^analysis/graphical$', views.graphicalAnalysis, name='graphicalAnalysis'),
 	url(r'^analysis/tables$', views.tabularAnalysis, name='tabularAnalysis'),
     url(r'^filemanager/imageView$', views.imageView, name='imageView'),
-    url(r'^filemanager/videoView$', views.videoView, name='videoView')
-
+    url(r'^filemanager/videoView$', views.videoView, name='videoView'),
+    url(r'^filemanager/audioView$', views.audioView, name='audioView')
 ]

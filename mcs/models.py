@@ -12,7 +12,7 @@ class Files(models.Model):
     lat = models.FloatField()
     DateTime = models.DateTimeField(db_index=True)
     Ttl = models.CharField(max_length=255)
-
+    GroupId = models.CharField(max_length=255)
     def __str__(self):
         return self.Name
 

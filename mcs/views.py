@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from .models import *
+from django.db.models import *
 import glob
 from os import path
 from datetime import datetime
 from textblob import TextBlob
+import shutil
 
-RELATIVE_PATH_TO_SYNC = "../sync/*"
-
+RELATIVE_PATH_TO_SYNC = "../offlinemcs/static/sync/*"
 
 def insertToSpecificTable(filePath, fileType, fileModelObj):
 	if(fileType == 'SMS'):
@@ -21,27 +22,29 @@ def insertToSpecificTable(filePath, fileType, fileModelObj):
 	if(fileType == 'TXT'):
 		fileObj = open(filePath, 'r')
 		message = str(fileObj.read())
-		messageSplit = message.split(':')
 
-		if(messageSplit[0] == 'Health'):
-			strTxtObj = Health(Type=messageSplit[1],Quantity=messageSplit[2],File=fileModelObj)
-			strTxtObj.save()
-		if(messageSplit[0] == 'Shelter'):
-			strTxtObj = Shelter(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
-			strTxtObj.save()    	
-		
-		if(messageSplit[0] == 'Victims'):
-			strTxtObj = Victims(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
-			strTxtObj.save()    	
-		
-		if(messageSplit[0] == 'Food'):
-			strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
-			strTxtObj.save()
-		
-		if(messageSplit[0] == 'Areas'):
-			strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
-			strTxtObj.save()
-		
+		messageLineSplit = message.split('\n')
+		for mesg in messageLineSplit:
+			messageSplit = mesg.split(':')
+
+			if(messageSplit[0] == 'Health'):
+				strTxtObj = Health(Type=messageSplit[1],Quantity=messageSplit[2],File=fileModelObj)
+				strTxtObj.save()
+			if(messageSplit[0] == 'Shelter'):
+				strTxtObj = Shelter(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
+				strTxtObj.save()    	
+			
+			if(messageSplit[0] == 'Victim'):
+				strTxtObj = Victims(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
+				strTxtObj.save()    	
+			
+			if(messageSplit[0] == 'Food'):
+				strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
+				strTxtObj.save()
+			
+			if(messageSplit[0] == 'Areas'):
+				strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
+				strTxtObj.save()	
 	return 1
 
 
@@ -61,6 +64,7 @@ def extractFileInfo(fileName):
 
 def checkAndInsert(filePath):
 	fileName = path.basename(filePath)
+	
 	if(not Files.objects.filter(Name=fileName).exists()):
 		FileInfo = extractFileInfo(fileName)
 		size = path.getsize(filePath)
@@ -69,7 +73,7 @@ def checkAndInsert(filePath):
 				  Destination=FileInfo['destination'],
 				  lon=FileInfo['long'],
 				  lat=FileInfo['lat'],
-				  DateTime=FileInfo['datetime'], Ttl=FileInfo['ttl'])
+				  DateTime=FileInfo['datetime'], Ttl=FileInfo['ttl'], GroupId = FileInfo['groupId'])
 		f.save()
 		if(insertToSpecificTable(filePath, FileInfo['type'], f)):
 			return 1
@@ -78,12 +82,9 @@ def checkAndInsert(filePath):
 def fileStruct():
 	fileLatLangTable = {}
 	fileList = Files.objects.values_list();
-	for item in fileList:
-		print 
 
 # Create your views here
 def index(request):
-	fileStruct()
 	context = {}
 	context['countAllFiles'] = Files.objects.all().count()
 	context['countIMG'] = Files.objects.filter(Type='IMG').count()
@@ -92,8 +93,20 @@ def index(request):
 	context['countTXT'] = Files.objects.filter(Type='TXT').count()
 	context['countAUD'] = Files.objects.filter(Type='AUD').count()
 	allFiles = Files.objects.all()
-	context['latlong'] = [(i.lat, i.lon) for i in allFiles]
-	
+	context['latlong'] = [(i.lat, i.lon, i.Name) for i in allFiles]
+	sum = 0
+	sum1 = 0
+	for pair in context['latlong']:
+   		sum += pair[0]
+   		sum1 += pair[1]
+
+   	if context['countAllFiles'] > 0:
+   		print context['latlong']
+	   	context['latlongAvg'] = (sum/context['countAllFiles'],sum1/context['countAllFiles'])
+	   	print context['latlongAvg']
+	else:
+		context['latlongAvg'] = (23.548822,87.29262)   	
+   	
 	if context['countAllFiles'] > 0:
 		context['audioDistribution'] = (
 			context['countAUD'] * 100) / context['countAllFiles']
@@ -107,10 +120,14 @@ def index(request):
 			context['countVID'] * 100) / context['countAllFiles']
 
 	context['listIMG'] = Files.objects.filter(Type='IMG')
+
+	context['GroupId'] = Files.objects.filter(GroupId = '2')
+	
 	return render(request, 'mcs/index.html', context)
 
 def sync(request):
 	allFilePaths = glob.glob(RELATIVE_PATH_TO_SYNC)
+
 	i = 0
 	for filePath in allFilePaths:
 		i += checkAndInsert(filePath)
@@ -130,28 +147,39 @@ def graphicalAnalysis(request):
 	
 	context['Health'] =  Health.objects.values_list()
 	context['HealthData'] = {}
-	for x in context['Health']:
-		context['HealthData'][x[1]] = x[2]
-	print context['HealthData']
+	for listItems in context['Health']:
+		if listItems[1] in context['HealthData']:
+			context['HealthData'][listItems[1]] = context['HealthData'][listItems[1]] + int(listItems[2])
+		else:	
+			context['HealthData'][listItems[1]] = listItems[2]
 
-	context['Food'] =  Food.objects.values_list()
+
+	context['Food'] = Food.objects.values_list()
 
 	context['FoodData'] = {}
-	for x in context['Food']:
-		context['FoodData'][x[1]] = x[2]
-	print context['FoodData']
+	for listItems in context['Food']:
+		if listItems[1] in context['FoodData']:
+			context['FoodData'][listItems[1]] = context['FoodData'][listItems[1]] + int(listItems[2])
+		else:	
+			context['FoodData'][listItems[1]] = listItems[2]
 
 
 	context['Victims'] = Victims.objects.values_list()
 	context['VictimsCount'] = Victims.objects.all().count()
-	print context['Victims']
 	context['VictimData'] = {}
-	for x in context['Victims']:
-		countVictimPerc = (x[2]* 100 / context['VictimsCount'])/2
-		context['VictimData'][x[1]] = countVictimPerc
+	context['VictimDataPerc'] = {}
 
-	print context['VictimData']
+	for listItems in context['Victims']:
+		if listItems[1] in context['VictimData']:
+			context['VictimData'][listItems[1]] = context['VictimData'][listItems[1]] + int(listItems[2])
 
+		else:	
+			context['VictimData'][listItems[1]] = listItems[2]
+			
+	for listItem in context['VictimData'].iteritems():
+		context['VictimDataPerc'][listItem[0]] = (listItem[1] * 100/sum(context['VictimData'].values()))
+		
+	print context['VictimDataPerc']
 
 	context['years'] = list()
 	for years in context['DateTime']:
@@ -194,39 +222,47 @@ def tabularAnalysis(request):
 	
 	context['Health'] =  Health.objects.values_list()
 	context['HealthData'] = {}
-	for x in context['Health']:
-		context['HealthData'][x[1]] = x[2]
-	print context['HealthData']
+	for listItems in context['Health']:
+		if listItems[1] in context['HealthData']:
+			context['HealthData'][listItems[1]] = context['HealthData'][listItems[1]] + int(listItems[2])
+		else:	
+			context['HealthData'][listItems[1]] = listItems[2]
 
 	context['Food'] =  Food.objects.values_list()
 
 	context['FoodData'] = {}
-	for x in context['Food']:
-		context['FoodData'][x[1]] = x[2]
-	print context['FoodData']
+	print context['Food']
+	for listItems in context['Food']:
+		if listItems[1] in context['FoodData']:
+			context['FoodData'][listItems[1]] = context['FoodData'][listItems[1]] + int(listItems[2])
+		else:	
+			context['FoodData'][listItems[1]] = listItems[2]
 
 
 	context['Victims'] = Victims.objects.values_list()
 	context['VictimsCount'] = Victims.objects.all().count()
-	print context['Victims']
 	context['VictimData'] = {}
-	for x in context['Victims']:
-		countVictimPerc = (x[2])
-		context['VictimData'][x[1]] = countVictimPerc
+	context['VictimDataPerc'] = {}
 
-	print context['VictimData']
+	for listItems in context['Victims']:
+		if listItems[1] in context['VictimData']:
+			context['VictimData'][listItems[1]] = context['VictimData'][listItems[1]] + int(listItems[2])
 
-	
+		else:	
+			context['VictimData'][listItems[1]] = listItems[2]
 	context['TtlFinalVal'] = {j:context['TtlVal'].count(j) for j in context['TtlVal']}
-	print(context['TtlFinalVal'])
    
 	return render(request, 'mcs/tables.html', context)
 
 def imageView(request):
 	context = {}
 	context['imgList'] = Files.objects.filter(Type='IMG')
-	
 	return render(request, 'mcs/images.html', context)
+
+def audioView(request):
+	context = {}
+	context['audioList'] = Files.objects.filter(Type='AUD')
+	return render(request, 'mcs/audios.html', context)
 
 def videoView(request):
 	context = {}
