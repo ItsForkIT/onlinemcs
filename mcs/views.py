@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse	
 from django.shortcuts import redirect
 from .models import *
 from django.db.models import *
@@ -6,7 +7,8 @@ import glob
 from os import path
 from datetime import datetime
 from textblob import TextBlob
-import shutil
+import shutil,json
+from django.template import RequestContext
 
 RELATIVE_PATH_TO_SYNC = "../offlinemcs/static/sync/*"
 
@@ -121,8 +123,6 @@ def index(request):
 
 	context['listIMG'] = Files.objects.filter(Type='IMG')
 
-	context['GroupId'] = Files.objects.filter(GroupId = '2')
-	
 	return render(request, 'mcs/index.html', context)
 
 def sync(request):
@@ -269,3 +269,32 @@ def videoView(request):
 	context['vidList'] = Files.objects.filter(Type='VID')
 	print(context['vidList'])
 	return render(request, 'mcs/videos.html', context)
+
+def groupView(request):
+	context = {}
+	context['allSource'] = Files.objects.values_list('Source', flat=True).distinct()
+	context['groups'] = Files.objects.values_list('GroupId', flat=True).distinct()
+	context['groupFin'] = {}
+	
+	context['checker'] = {}
+	
+	# checking for RESPONSE
+	if request.GET:
+		source = request.GET.get('value')
+		group = request.GET.get('group')
+
+		context['checker'] = list(Files.objects.filter(Source=source).filter(GroupId=group))
+
+		listGroup = []
+
+		for item in context['checker']:
+			listGroup.append(str(item))
+
+		print listGroup
+
+		data = json.dumps(listGroup)
+		
+		return HttpResponse(data, "application/json")
+
+	return render(request, 'mcs/group.html', context)
+			

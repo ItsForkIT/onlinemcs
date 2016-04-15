@@ -113,6 +113,8 @@
                                         </li>
                                         <li><a href="/filemanager/videoView">Video</a>
                                         </li>
+                                        <li><a href="/filemanager/groupView">Group View</a>
+                                        </li>
                                     </ul>
                                 </li>
                                 
@@ -288,57 +290,17 @@
             attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors | <a href="https://mapzen.com/" target="_blank">Mapzen</a>'
         });
     
-        var latlng = L.latLng(23.56, 87.29);
-        var map = L.map('map', {center: latlng, zoom: 13, layers: [layer]});
+        //var latlng = L.latLng(23.56, 87.29);
+        //var map = L.map('map', {center: latlng, zoom: 13, layers: [layer]});
+        var map = L.map('map', {zoom: 13, layers: [layer]});
 
         layer.addTo(map);
 
         map.setView([{{latlongAvg.0}}, {{latlongAvg.1}}], 13);
         
         {% for i,j,fname in  latlong %}
-        var marker = L.marker([{{ i }}, {{ j }}]).bindPopup('{{ fname }}').addTo(map);
-       
+        var marker = L.marker([{{ i }}, {{ j }}]).bindPopup('{{fname}}').addTo(map);
         {% endfor %}
-
-        //***********************************************************************************************
-    var addressPoints = [
-        [23.448822,87.29262, "2"],
-        [23.555553,87.29266, "3"],
-        [23.5490571,87.2927636, "3A"],
-    ];
-
-    
-        var latlng = L.latLng(23.5, 87.29);
-        var fullCount = 29;
-        var quarterCount = Math.round(fullCount / 4);
-
-
-
-    var mcgLayerSupportGroup = L.markerClusterGroup.layerSupport(),
-        group1 = L.layerGroup(),
-        group2 = L.layerGroup(),
-        group3 = L.layerGroup(),
-        group4 = L.layerGroup(),
-        control = L.control.layers(null, null, { collapsed: false }),
-        i, a, title, marker;
-
-    mcgLayerSupportGroup.addTo(map);
-
-    for (i = 0; i < fullCount; i++) {
-        a = addressPoints[i];
-        title = a[2];
-        marker = L.marker([a[0], a[1]], { title: title });
-        marker.bindPopup(title);
-
-        marker.addTo(i < quarterCount ? group1 : i < quarterCount * 2 ? group2 : i < quarterCount * 3 ? group3 : group4);
-    }
-
-    mcgLayerSupportGroup.checkIn([group1, group2, group3, group4]);
-
-    group1.addTo(map); // Adding to map or to AutoMCG are now equivalent.
-    group2.addTo(map);
-    group3.addTo(map);
-    group4.addTo(map);
 
         //***********************************************************************************************
     </script>
