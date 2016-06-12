@@ -16,12 +16,9 @@
     <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 
     <link href="{% static "fonts/css/font-awesome.min.css" %}" rel="stylesheet">
-    <link href="{% static "css/animate.min.css" %}" rel="stylesheet">
 
     <!-- Custom styling plus plugins -->
     <link href="{% static "css/custom.css" %}" rel="stylesheet">
-    <link href="{% static "css/icheck/flat/green.css" %}" rel="stylesheet">
-
 
     <script src="{% static "js/jquery.min.js" %}"></script>
 
@@ -48,8 +45,9 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
 
+
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>MCS Dashboard</span></a>
+                        <a href="/" class="site_title"><i class="fa fa-tasks"></i> <span>MCS Dashboard</span></a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -65,7 +63,7 @@
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
+                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-circle"></span></a></li>
                                 <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
@@ -81,18 +79,21 @@
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="/filemanager/imageView">Images</a>
                                         </li>
+                                        <li><a href="/filemanager/audioView">Audio</a>
+                                        </li>
                                         <li><a href="/filemanager/videoView">Video</a>
+                                        </li>
+                                        <li><a href="/filemanager/groupView">Group View</a>
                                         </li>
                                     </ul>
                                 </li>
-                                
+                                <li><a href="/reportGen"><i class="fa fa-file-text"></i> Report Generation <span class="fa fa-circle"></span></a></li>
                             </ul>
                         </div>
                         
                     </div>
                     <!-- /sidebar menu -->
 
-                   
                    
                     <!-- /sidebar menu -->
 
@@ -387,36 +388,15 @@
 
     <script src="{% static "js/bootstrap.min.js" %}"></script>
 
-    <!-- chart js -->
-    <script src="{% static "js/chartjs/chart.min.js" %}"></script>
-    <!-- bootstrap progress js -->
     <script src="{% static "js/progressbar/bootstrap-progressbar.min.js" %}"></script>
     <script src="{% static "js/nicescroll/jquery.nicescroll.min.js" %}"></script>
-    <!-- icheck -->
-    <script src="{% static "js/icheck/icheck.min.js" %}"></script>
-
     <script src="{% static "js/custom.js" %}"></script>
 
     <!-- moris js -->
     <script src="{% static "js/moris/raphael-min.js" %}"></script>
     <script src="{% static "js/moris/morris.js" %}"></script>
-  <!--  <script src="{% static "js/moris/example.js" %}"></script>-->
     <script type="text/javascript">
         $(function () {
-
-    /* data stolen from http://howmanyleft.co.uk/vehicle/jaguar_'e'_type */
-    var day_data = [
-        {"period": "2012-10-01", "licensed": 807, "sorned": 660},
-        {"period": "2012-09-30", "licensed": 1251, "sorned": 729},
-        {"period": "2012-09-29", "licensed": 1769, "sorned": 1018},
-        {"period": "2012-09-20", "licensed": 2246, "sorned": 1461},
-        {"period": "2012-09-19", "licensed": 2657, "sorned": 1967},
-        {"period": "2012-09-18", "licensed": 3148, "sorned": 2627},
-        {"period": "2012-09-17", "licensed": 3471, "sorned": 3740},
-        {"period": "2012-09-16", "licensed": 2871, "sorned": 2216},
-        {"period": "2012-09-15", "licensed": 2401, "sorned": 1656},
-        {"period": "2012-09-10", "licensed": 2115, "sorned": 1022}
-    ];
 
     Morris.Bar({
         element: 'graph_bar',
@@ -470,10 +450,9 @@ Morris.Bar({
     Morris.Donut({
         element: 'graph_donut',
         data: [
-            {label: 'Bardhamman', value: 25},
-            {label: 'Bankura', value: 40},
-            {label: 'Hooghly', value: 25},
-            {label: 'Midnapore', value: 10}
+           {% for key,values in latlongFinal.items %}
+                {label: '{{key}}',value: '{{values}}'},
+          {% endfor %}
         ],
         colors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
         formatter: function (y) {
@@ -543,10 +522,7 @@ Morris.Bar({
 		  data: [
 	  	  {% for key,values in countYears.items %}
 		        {m: '{{key}}',a: '{{values}}'},
-           
-		   // m: '{{key}}', // <-- valid timestamp strings
-		   // a: '{{values}}',
-	      {% endfor %}
+  	      {% endfor %}
           
 		  ],
 		  xkey: 'm',
@@ -562,19 +538,7 @@ Morris.Bar({
 		    return month;
 		  },
 		});
-        new Morris.Line({
-            element: 'graph_line12',
-            xkey: 'year',
-            ykeys: ['value'],
-            labels: ['Value'],
-            hideHover: 'auto',
-            lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            data: [
-                {year: '2008', value: 20},
-                {year: '2012', value: 20}
-            ]
-        });
-
+  
     });
     </script>
 

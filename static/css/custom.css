@@ -1,7 +1,7 @@
 body.nav-sm .container.body .left_col {
     width: 70px;
     padding: 0;
-    position: fixed;
+    position: absolute;
     height: 100%;
 }
 
@@ -25,7 +25,6 @@ body.nav-sm .navbar.nav_title a i {
 }
 
 .site_title i {
-    border: 1px solid #EAEAEA;
     padding: 5px 6px;
     border-radius: 50%;
 }
@@ -190,7 +189,7 @@ body.nav-sm .menu_section h3 {
     border-bottom: 1px solid #E6E9ED;*/
     
     background: #EDEDED;
-    border-bottom: 1px solid #D9DEE4;
+    border-bottom: 3px solid darkcyan;
     margin-bottom: 10px;
     width: 100%;
 }
@@ -770,6 +769,7 @@ li.current-page a {
     font-weight: 400;
     font-size: 22px;
     width: 100%;
+    background-color:darkcyan;
     color: #ECF0F1 !important;
     margin-left: 0 !important;
     line-height: 59px;
@@ -1060,7 +1060,7 @@ h2 {
     padding: 10px 17px;
     display: inline-block;
     background: #fff;
-    border: 1px solid #E6E9ED;
+    border: 1px solid darkcyan;
     -webkit-column-break-inside: avoid;
     -moz-column-break-inside: avoid;
     column-break-inside: avoid;

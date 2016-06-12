@@ -16,12 +16,9 @@
     <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 
     <link href="{% static "fonts/css/font-awesome.min.css" %}" rel="stylesheet">
-    <link href="{% static "css/animate.min.css" %}" rel="stylesheet">
 
     <!-- Custom styling plus plugins -->
     <link href="{% static "css/custom.css" %}" rel="stylesheet">
-    <link href="{% static "css/icheck/flat/green.css" %}" rel="stylesheet">
-
 
     <script src="{% static "js/jquery.min.js" %}"></script>
     <link href="{% static "css/prettyPhoto.css" %}" rel="stylesheet">
@@ -48,8 +45,9 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
 
+
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>MCS Dashboard</span></a>
+                        <a href="/" class="site_title"><i class="fa fa-tasks"></i> <span>MCS Dashboard</span></a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -65,7 +63,7 @@
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
+                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-circle"></span></a></li>
                                 <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
@@ -81,11 +79,15 @@
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="/filemanager/imageView">Images</a>
                                         </li>
+                                        <li><a href="/filemanager/audioView">Audio</a>
+                                        </li>
                                         <li><a href="/filemanager/videoView">Video</a>
+                                        </li>
+                                        <li><a href="/filemanager/groupView">Group View</a>
                                         </li>
                                     </ul>
                                 </li>
-                                
+                                <li><a href="/reportGen"><i class="fa fa-file-text"></i> Report Generation <span class="fa fa-circle"></span></a></li>
                             </ul>
                         </div>
                         
@@ -160,7 +162,7 @@
                                     		<label class="control-label col-md-3 col-sm-3 col-xs-12">Source:</label>
 						                      <div class="col-md-9 col-sm-9 col-xs-12">
 						                        <select class="select2_single form-control" id="selectBox" tabindex="-1">
-						                          <option></option>	
+						                          <option value="" disabled selected>Select Source</option>	
 						                          {%for element in allSource %}
 							                          <option value="{{element}}">{{element}}</option> 
 												  {% endfor %}
@@ -174,7 +176,7 @@
                                     		<label class="control-label col-md-3 col-sm-3 col-xs-12">Group:</label>
 						                      <div class="col-md-9 col-sm-9 col-xs-12">
 						                        <select class="select2_single form-control" id="selectBoxGroup" tabindex="-1">
-						                          <option></option>	
+						                          <option value="" disabled selected>Select Group</option>
 						                          {%for element in groups %}
 							                          <option value="{{element}}">{{element}}</option> 
 												  {% endfor %}
@@ -187,7 +189,7 @@
 
 								</div>
 
-				                <input type="button" class="btn btn-success" style="margin-top:3%;width:100%;margin:0 auto;" id="post" value="Post Request" >
+				                <input type="button" class="btn btn-success" style="margin-top:3%;width:100%;margin:0 auto;" id="post" value="See Files in Group" >
 				                <div class="x_content">
 				                  <table class="table table-hover" id="table">
 				                    <thead>
@@ -216,11 +218,7 @@
 
     <script src="{% static "js/bootstrap.min.js" %}"></script>
 
-    <!-- bootstrap progress js -->
-    <script src="{% static "js/progressbar/bootstrap-progressbar.min.js" %}"></script>
     <script src="{% static "js/nicescroll/jquery.nicescroll.min.js" %}"></script>
-    <!-- icheck -->
-    <script src="{% static "js/icheck/icheck.min.js" %}"></script>
 
     <script src="{% static "js/custom.js" %}"></script>
 
@@ -239,12 +237,16 @@
 		            "data": data,
 		            "success": function(result) {
 		            	console.log(result);
-						for (i = 0; i < result.length; i++) {
+                        if (!$.trim(result)){   
+                            alert("No Matching Files !!");
+                        }
+                        else{ 
+    						for (i = 0; i < result.length; i++) {
 
-						    var newText  = "<tr><th scope='row'>" + (i + 1) +  "</th><td>" + $('#selectBox option:selected').val() + "</td><td>" + result[i] + "</td><td>" + $('#selectBoxGroup option:selected').val() + "</td></tr>";
-							$("#table tbody").append(newText);	
-						}
-		            		      
+    						    var newText  = "<tr><th scope='row'>" + (i + 1) +  "</th><td>" + $('#selectBox option:selected').val() + "</td><td>" + result[i] + "</td><td>" + $('#selectBoxGroup option:selected').val() + "</td></tr>";
+    							$("#table tbody").append(newText);	
+    						}
+		            	}	      
 		            },
 		        });
 		    });

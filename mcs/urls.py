@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^filemanager/videoView$', views.videoView, name='videoView'),
     url(r'^filemanager/audioView$', views.audioView, name='audioView'),
     url(r'^filemanager/groupView$', views.groupView, name='groupView'),
+    url(r'^reportGen$', views.reportGen, name='reportGen'),
 ]

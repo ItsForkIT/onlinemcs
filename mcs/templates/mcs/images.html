@@ -20,8 +20,6 @@
 
     <!-- Custom styling plus plugins -->
     <link href="{% static "css/custom.css" %}" rel="stylesheet">
-    <link href="{% static "css/icheck/flat/green.css" %}" rel="stylesheet">
-
 
     <script src="{% static "js/jquery.min.js" %}"></script>
     <link href="{% static "css/prettyPhoto.css" %}" rel="stylesheet">
@@ -50,8 +48,9 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
 
+
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>MCS Dashboard</span></a>
+                        <a href="/" class="site_title"><i class="fa fa-tasks"></i> <span>MCS Dashboard</span></a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -61,13 +60,13 @@
                     <br />
 
                    
-                    <!-- sidebar menu -->
+                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
+                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-circle"></span></a></li>
                                 <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
@@ -83,11 +82,15 @@
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="/filemanager/imageView">Images</a>
                                         </li>
+                                        <li><a href="/filemanager/audioView">Audio</a>
+                                        </li>
                                         <li><a href="/filemanager/videoView">Video</a>
+                                        </li>
+                                        <li><a href="/filemanager/groupView">Group View</a>
                                         </li>
                                     </ul>
                                 </li>
-                                
+                                <li><a href="/reportGen"><i class="fa fa-file-text"></i> Report Generation <span class="fa fa-circle"></span></a></li>
                             </ul>
                         </div>
                         
@@ -195,16 +198,10 @@
 
     <script src="{% static "js/bootstrap.min.js" %}"></script>
 
-    <!-- chart js -->
-    <script src="{% static "js/chartjs/chart.min.js" %}"></script>
     <!-- bootstrap progress js -->
     <script src="{% static "js/progressbar/bootstrap-progressbar.min.js" %}"></script>
     <script src="{% static "js/nicescroll/jquery.nicescroll.min.js" %}"></script>
-    <!-- icheck -->
-    <script src="{% static "js/icheck/icheck.min.js" %}"></script>
-
     <script src="{% static "js/custom.js" %}"></script>
-
     <script src="{% static "js/jquery.prettyPhoto.js" %}"></script>
     <script type="text/javascript" charset="utf-8">
             $(document).ready(function(){
