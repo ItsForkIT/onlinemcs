@@ -1,5 +1,5 @@
-from django.conf.urls import url
-
+from django.conf.urls import url,patterns
+from django.conf import settings
 from . import views
 
 urlpatterns = [
@@ -12,4 +12,11 @@ urlpatterns = [
     url(r'^filemanager/audioView$', views.audioView, name='audioView'),
     url(r'^filemanager/groupView$', views.groupView, name='groupView'),
     url(r'^reportGen$', views.reportGen, name='reportGen'),
+    url(r'^sms$', views.sms, name='sms'),
+
 ]
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.MEDIA_ROOT}))

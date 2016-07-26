@@ -181,46 +181,58 @@
 
                                 <div class="col-md-12 col-sm-12 col-xs-6">
                                     <div>
+                                        <a href="filemanager/audioView">
                                         <p>Audio Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
                                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ audioDistribution }}></div>
                                             </div>
                                         </div>
+                                        </a>
                                     </div>
                                     <div>
+                                        <a href="filemanager/imageView">
                                         <p>Image Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
                                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ imageDistribution }}></div>
                                             </div>
                                         </div>
+                                        </a>
                                     </div>
                                     <div>
+                                        <a href="filemanager/videoView">
                                         <p>Video Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
                                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{videoDistribution}}></div>
                                             </div>
                                         </div>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-6">
                                     <div>
+
+                                        <a href="sms">
                                         <p>SMS Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
                                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{ smsDistribution }}></div>
                                             </div>
                                         </div>
+                                        </a>
                                     </div>
                                     <div>
+
+                                        <a href="sms">
                                         <p>TXT Files</p>
                                         <div class="">
                                             <div class="progress progress_sm" style="width: 76%;">
                                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal={{txtDistribution}}></div>
                                             </div>
                                         </div>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -262,7 +274,8 @@
         layer.addTo(map);
 
         //map.setView([{{latlongAvg.0}}, {{latlongAvg.1}}], 13);
-        map.setView([23.548822,87.29262],16);
+        map.setView([17.4463,78.3421],16);
+        // map.setView([23.54,87.23],16);
         {% for i,j,fname in  latlong %}
             var marker = L.marker([{{ i }}, {{ j }}]).bindPopup('{{fname}}').addTo(map);
         {% endfor %}

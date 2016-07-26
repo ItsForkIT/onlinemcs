@@ -162,11 +162,11 @@
                                 </div>
                                 <div class="x_content">
                                     <div class="row  gallery clearfix">
-                                    {% for i in imgList %}
+                                    {% for i in images %}
                                            {% static "" as baseURL %}
                                         <div class="col-md-55" >
                                                 <div class="image view view-first">
-                                                    <a href={{baseURL}}/sync/{{i}} rel="prettyPhoto[gallery2]"><img style="width: 100%; height: 12em; display: block;" src={{baseURL}}/sync/{{i}}/></a>
+                                                    <a href=/media/sync/{{i}} rel="prettyPhoto[gallery2]"><img style="width: 100%; height: 12em; display: block;" src=/media/sync/{{i}}></a>
                                                 </div>  
 
                                         </div>  
@@ -174,7 +174,21 @@
                                     {% endfor %}
                                         
                                     </div>
+                                    <div class="pagination">
+                                        <span class="step-links">
+                                            {% if images.has_previous %}
+                                                <a href="?page={{ images.previous_page_number }}">previous</a>
+                                            {% endif %}
 
+                                            <span class="current">
+                                                Page {{ images.number }} of {{ images.paginator.num_pages }}
+                                            </span>
+
+                                            {% if images.has_next %}
+                                                <a href="?page={{ images.next_page_number }}">next</a>
+                                            {% endif %}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -106,9 +106,11 @@ SYNC_URL = os.path.abspath(BASE_DIR + "/../sync/")
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = '../dms/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+

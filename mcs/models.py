@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # Create your models here.
 class Files(models.Model):
     Name = models.CharField(max_length=255, db_index=True)
@@ -55,3 +54,11 @@ class UnstructuredTXT(models.Model):
     def __str__(self):
         return (self.File.__str__() + " | SentimentPolarity: " +
                 str(self.SentimentPolarity))
+
+class SMSRegistration(models.Model):
+	Name = models.CharField(max_length=255, db_index=True)
+	Email = models.CharField(max_length=255, db_index=True)
+	Phone = models.IntegerField()
+	Designation = models.CharField(max_length=255, db_index=True)
+	def __str__(self):
+		return self.Name
