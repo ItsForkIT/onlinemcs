@@ -131,7 +131,7 @@
 
                     <div class="page-title">
                         <div class="title_left">
-                            <h3> SMS Sender </h3>
+                            <h3> Update Profile </h3>
                         </div>
 
                     </div>
@@ -143,7 +143,7 @@
 	              <div class="col-md-12">
 	                <div class="x_panel">
 	                  <div class="x_title">
-	                    <h2>Register New User </h2>
+	                    <h2> Edit User {{name}} </h2>
 	                    <ul class="nav navbar-right panel_toolbox">
 	                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
 	                      </li>
@@ -166,156 +166,41 @@
 	                    <form class="form-horizontal form-label-left input_mask" method="post">
 	                    	{% csrf_token %}
 	                      <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-	                        <input type="text" class="form-control has-feedback-left" name="Name" placeholder="Name">
+	                        <input type="text" class="form-control has-feedback-left" name="Name" placeholder="{{name}}" value="{{name}}">
 	                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 	                      </div>
 
 	                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-	                        <input type="text" class="form-control has-feedback-left"  name="Email" id="inputSuccess4" placeholder="Email">
+	                        <input type="text" class="form-control has-feedback-left"  name="Email" id="inputSuccess4" placeholder="{{email}}" value="{{email}}">
 	                        <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
 	                      </div>
 
 	                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-	                        <input type="text" class="form-control has-feedback-left" name="Phone"  id="inputSuccess5" placeholder="Phone">
+	                        <input type="text" class="form-control has-feedback-left" name="Phone"  id="inputSuccess5" placeholder="{{phone}}" phone="{{phone}}">
 	                        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
 	                      </div>
 						
-						<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-	                        <input type="text" class="form-control has-feedback-left" name="Designation"  id="inputSuccess5" placeholder="Designation">
+					             	<div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+	                        <input type="text" class="form-control has-feedback-left" name="Designation"  id="inputSuccess5" placeholder="{{designation}}" value="{{designation}}">
 	                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
 	                      </div>
 
 							                      
 	                      <div class="form-group">
-	                        <div class="col-md-9 col-sm-9 col-xs-12">	
-	                          <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure?')">Register</button>
-	                        </div>
+                          <div class="col-md-9 col-sm-9 col-xs-12"> 
+                            <form action="" method="POST">
+                                <button type="submit" class="btn btn-success" onclick="return confirm('Edit User: \n----------------------  \n Name: {{name}} \n Phone: {{phone}} \n Email: {{email}} \n Designation: {{designation}}')">Update</button>
+                              
+                              <!--  <button type="submit" class="btn btn-warning" id="delUser" onclick="return confirm('Delete User: \n Name:{{name}} \n Phone:{{phone}}\n Email:{{email}} \nDesignation:{{designation}}')">Delete User</button>
+                              -->
+                               <button type="submit" class="btn btn-danger" id="delUser" name="delUser"  onclick="return confirm('Delete User: \n---------------------- \n Name: {{name}} \n Phone: {{phone}} \n Email: {{email}} \n Designation: {{designation}}')">Delete User</button>
+                            </form>
+                          </div>
 	                      </div>
 
 	                    </form>
 	                  </div>
 	                </div>
-	                <div class="row">
-                       <div class="col-md-12">
-
-                      <div class="x_panel" role="tabpanel" data-example-id="togglable-tabs">
-                        <div class="x_title">
-                        <h2> SMS Module </h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                          </li>
-                          <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true"><i class="fa fa-wrench"></i></a>
-                            <ul class="dropdown-menu" role="menu">
-                              <li><a href="#">Settings 1</a>
-                              </li>
-                              <li><a href="#">Settings 2</a>
-                              </li>
-                            </ul>
-                          </li>
-                          <li><a class="close-link"><i class="fa fa-close"></i></a>
-                          </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                      </div>
-                        <ul id="myTab" class="nav nav-tabs bar_tabs" style="background:none;" role="tablist">
-                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Send SMS</a>
-                          </li>
-                          <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Sent SMS</a>
-                          </li>
-                        </ul>
-                        <div id="myTabContent" class="tab-content">
-                          <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-
-                            <!-- start recent activity -->
-                             <table class="table" style="table-layout:fixed;" id="table">
-                                    <thead>
-                                      <tr>
-                                        <th>Name</th>
-                                        <th>Designation</th>
-                                        <th></th>
-                                      </tr>
-                                      {% for Name,Desig,Phone in registeredUserList %}
-                                      <tr>
-                                        <td>{{Name}}</td><td>{{Desig}}</td><td><input type='button' class='btn btn-xs btn-success' style='margin-top:3%;margin:0 auto;' id='sms{{ forloop.counter0 }}' onclick="sendSMS('{{Phone}}');" value='Send SMS' /></td><td><input type='button' class='btn btn-xs btn-warning' style='margin-top:3%;margin:0 auto;'  id='edit{{ forloop.counter0 }}' onclick="location.href='editProfile?phone=' + {{ Phone }};" value='Edit User' /></td>
-                                      </tr>
-                                      {% endfor %}
-                                    </thead>
-                                    <tbody>
-                                     
-                                    </tbody>
-                                  </table>
-
-                          </div>
-                          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
-
-                            <!-- start user projects -->
-                            <table class="data table table-striped no-margin">
-                              <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>Project Name</th>
-                                  <th>Client Company</th>
-                                  <th class="hidden-phone">Hours Spent</th>
-                                  <th>Contribution</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>1</td>
-                                  <td>New Company Takeover Review</td>
-                                  <td>Deveint Inc</td>
-                                  <td class="hidden-phone">18</td>
-                                  <td class="vertical-align-mid">
-                                    <div class="progress">
-                                      <div class="progress-bar progress-bar-success" data-transitiongoal="35"></div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>2</td>
-                                  <td>New Partner Contracts Consultanci</td>
-                                  <td>Deveint Inc</td>
-                                  <td class="hidden-phone">13</td>
-                                  <td class="vertical-align-mid">
-                                    <div class="progress">
-                                      <div class="progress-bar progress-bar-danger" data-transitiongoal="15"></div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>3</td>
-                                  <td>Partners and Inverstors report</td>
-                                  <td>Deveint Inc</td>
-                                  <td class="hidden-phone">30</td>
-                                  <td class="vertical-align-mid">
-                                    <div class="progress">
-                                      <div class="progress-bar progress-bar-success" data-transitiongoal="45"></div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>4</td>
-                                  <td>New Company Takeover Review</td>
-                                  <td>Deveint Inc</td>
-                                  <td class="hidden-phone">28</td>
-                                  <td class="vertical-align-mid">
-                                    <div class="progress">
-                                      <div class="progress-bar progress-bar-success" data-transitiongoal="75"></div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <!-- end user projects -->
-
-                          </div>
-                          
-                        </div>
-                      </div>
-                    </div>
-	                
-                    </div>
 
                    
 

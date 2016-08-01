@@ -2,11 +2,17 @@ from django.shortcuts import render
 from mcs.models import *
 import shutil,json
 from django.http import HttpResponse	
+import os
 
 def sms(request):
 	context = {}
 	context['registeredUserList'] = SMSRegistration.objects.values_list('Name','Designation','Phone')
-	
+
+	if request.GET:
+		source = request.GET.get('sms')
+
+		#print "gammu sendsms TEXT " + source + " -text " + "Halooo .."	
+			
 	if request.method == 'POST':
 		name = request.POST.get('Name')
 		email = request.POST.get('Email')

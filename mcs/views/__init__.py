@@ -11,7 +11,7 @@ from tabular import *
 from viewers import *
 from sms import *
 from reportGen import *
-
+from editProfile import *
 
 
 

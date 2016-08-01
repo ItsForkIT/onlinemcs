@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^filemanager/groupView$', views.groupView, name='groupView'),
     url(r'^reportGen$', views.reportGen, name='reportGen'),
     url(r'^sms$', views.sms, name='sms'),
+    url(r'^editProfile$', views.editProfile, name='editProfile'),
 
 ]
 if settings.DEBUG:

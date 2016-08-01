@@ -48,7 +48,6 @@ def tabularAnalysis(request):
 		else:	
 			context['VictimData'][listItems[1]] = listItems[2]
 
-	print context['VictimData']
 	context['TtlFinalVal'] = {j:context['TtlVal'].count(j) for j in context['TtlVal']}
    
 	return render(request, 'mcs/tables.html', context)
