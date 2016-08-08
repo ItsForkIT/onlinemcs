@@ -176,7 +176,7 @@
 	                      </div>
 
 	                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-	                        <input type="text" class="form-control has-feedback-left" name="Phone"  id="inputSuccess5" placeholder="{{phone}}" phone="{{phone}}">
+	                        <input type="text" class="form-control has-feedback-left" name="Phone"  id="inputSuccess5" placeholder="{{phone}}" value="{{phone}}">
 	                        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
 	                      </div>
 						
@@ -189,7 +189,7 @@
 	                      <div class="form-group">
                           <div class="col-md-9 col-sm-9 col-xs-12"> 
                             <form action="" method="POST">
-                                <button type="submit" class="btn btn-success" onclick="return confirm('Edit User: \n----------------------  \n Name: {{name}} \n Phone: {{phone}} \n Email: {{email}} \n Designation: {{designation}}')">Update</button>
+                                <button type="submit" name="editUser" class="btn btn-success" onclick="return confirm('Edit User: \n----------------------  \n Name: {{name}} \n Phone: {{phone}} \n Email: {{email}} \n Designation: {{designation}}')">Update</button>
                               
                               <!--  <button type="submit" class="btn btn-warning" id="delUser" onclick="return confirm('Delete User: \n Name:{{name}} \n Phone:{{phone}}\n Email:{{email}} \nDesignation:{{designation}}')">Delete User</button>
                               -->

@@ -3,6 +3,7 @@ from mcs.models import *
 import glob
 from os import path
 from django.shortcuts import redirect
+from datetime import datetime
 
 RELATIVE_PATH_TO_SYNC = "../dms/sync/*"
 

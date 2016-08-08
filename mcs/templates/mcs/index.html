@@ -274,7 +274,7 @@
         layer.addTo(map);
 
         //map.setView([{{latlongAvg.0}}, {{latlongAvg.1}}], 13);
-        map.setView([17.4463,78.3421],16);
+        map.setView([22.44409,88.30203],15);
         // map.setView([23.54,87.23],16);
         {% for i,j,fname in  latlong %}
             var marker = L.marker([{{ i }}, {{ j }}]).bindPopup('{{fname}}').addTo(map);
