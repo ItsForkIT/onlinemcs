@@ -4,6 +4,8 @@ import glob
 from os import path
 from django.shortcuts import redirect
 from datetime import datetime
+import logging
+log = logging.getLogger(__name__)
 
 RELATIVE_PATH_TO_SYNC = "../dms/sync/*"
 
@@ -47,6 +49,9 @@ def insertToSpecificTable(filePath, fileType, fileModelObj):
 
 def extractFileInfo(fileName):
 	info = fileName.split("_")
+	if len(info) != 9:
+		log.error(str(fileName) + ": Wrong file structure")
+		return 0
 	fileInfo = {}
 	fileInfo['type'] = info[0]
 	fileInfo['ttl'] = info[1]
@@ -65,6 +70,8 @@ def checkAndInsert(filePath):
 		return 0
 	if(not Files.objects.filter(Name=fileName).exists()):
 		FileInfo = extractFileInfo(fileName)
+		if FileInfo == 0:
+			return 0
 		size = path.getsize(filePath)
 		f = Files(Name=fileName, Type=FileInfo['type'], Size=size,
 				  Source=FileInfo['source'],
@@ -126,7 +133,7 @@ def sync(request):
 
 	i = 0
 	for filePath in allFilePaths:
+		print filePath
 		i += checkAndInsert(filePath)
 	print(str(i) + " Files inserted")
 	return redirect(index)
-
