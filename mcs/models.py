@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 
 # Create your models here.
 class Files(models.Model):
@@ -11,7 +11,8 @@ class Files(models.Model):
     lon = models.FloatField()
     lat = models.FloatField()
     DateTime = models.DateTimeField(db_index=True)
-
+    Ttl = models.CharField(max_length=255)
+    GroupId = models.CharField(max_length=255)
     def __str__(self):
         return self.Name
 
@@ -54,3 +55,16 @@ class UnstructuredTXT(models.Model):
     def __str__(self):
         return (self.File.__str__() + " | SentimentPolarity: " +
                 str(self.SentimentPolarity))
+
+class SMSRegistration(models.Model):
+	Name = models.CharField(max_length=255, db_index=True)
+	Email = models.CharField(max_length=255, db_index=True)
+	Phone = models.IntegerField()
+	Designation = models.CharField(max_length=255, db_index=True)
+	def __str__(self):
+		return self.Name
+
+class SaveSMS(models.Model):
+    Destination = models.CharField(max_length=255, db_index=True)
+    Designation = models.CharField(max_length=255, db_index = True)
+    DateTime = models.DateTimeField(default=timezone.now)

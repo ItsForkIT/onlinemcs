@@ -16,13 +16,8 @@
     <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 
     <link href="{% static "fonts/css/font-awesome.min.css"  %}" rel="stylesheet">
-    <link href="{% static "css/animate.min.css" %}" rel="stylesheet">
-
     <!-- Custom styling plus plugins -->
     <link href="{% static "css/custom.css" %}" rel="stylesheet">
-    <link href="{% static "css/icheck/flat/green.css" %}" rel="stylesheet">
-
-
     <script src="{% static "js/jquery.min.js" %}"></script>
 
     <!--[if lt IE 9]>
@@ -47,23 +42,26 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
 
+
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>MCS Dashboard</span></a>
+                        <a href="/" class="site_title"><i class="fa fa-tasks"></i> <span>MCS Dashboard</span></a>
                     </div>
                     <div class="clearfix"></div>
 
+                                        
                     <!-- /menu prile quick info -->
 
                     <br />
 
+                  
                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-chevron-right"></span></a></li>
-                                <li><a href="sync.html"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
+                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-circle"></span></a></li>
+                                <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
                                 </li>
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
@@ -74,11 +72,27 @@
                                     </ul>
                                 </li>
                                 
+                                <li><a><i class="fa fa-desktop"></i> File Viewer <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu" style="display: none">
+                                        <li><a href="/filemanager/imageView">Images</a>
+                                        </li>
+                                        <li><a href="/filemanager/audioView">Audio</a>
+                                        </li>
+                                        <li><a href="/filemanager/videoView">Video</a>
+                                        </li>
+                                        <li><a href="/filemanager/groupView">Group View</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><a href="/reportGen"><i class="fa fa-file-text"></i> Report Generation <span class="fa fa-circle"></span></a></li>
                             </ul>
                         </div>
                         
                     </div>
                     <!-- /sidebar menu -->
+
+
+                   
 
                    
 
@@ -119,46 +133,6 @@
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Analysis results of text data</h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Text</th>
-                                                <th>Relevance</th>
-                                                <th>Sentiment</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>Help me</td>
-                                                <td>0.979895</td>
-                                                <td>positive</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                                <td>Relevance</td>
-                                                <td>0.8454545</td>
-                                                <td>neutral</td>
-                                            </tr>
-                                            
-                                        </tbody>
-                                    </table>
-
-                                </div>
                             </div>
                         </div>
 
@@ -185,18 +159,14 @@
                                                 <th>Quantity</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody>    
+                                        {% for key,values in FoodData.items %}
                                             <tr>
-                                                <th scope="row">1</th>
-                                                <td>Dal</td>
-                                                <td>Rice</td>
+                                                <th scope="row">{{forloop.counter}}</th>
+                                                <td>{{key}}</td>
+                                                <td>{{values}}</td>
                                             </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                                <td>10</td>
-                                                <td>10</td>
-                                            </tr>
-                                            
+                                        {% endfor %}                                            
                                         </tbody>
                                     </table>
 
@@ -228,16 +198,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                         {% for key,values in HealthData.items %}
+
                                             <tr>
-                                                <th scope="row">1</th>
-                                                <td>Jaundice</td>
-                                                <td>134</td>
+                                                <th scope="row">{{forloop.counter}}</th>
+                                                <td>{{key}}</td>
+                                                <td>{{values}}</td>
                                             </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                                <td>Stomach Upset</td>
-                                                <td>1080</td>
-                                            </tr>
+                                        {% endfor %}
+                                           
                                         </tbody>
                                     </table>
 
@@ -271,20 +240,17 @@
                                                 <th>Quantity</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>Dead</td>
-                                                <td>10</td>
-                                            </tr>
-                                        </tbody>
 
                                         <tbody>
+                                        {% for key,values in VictimData.items %}
+
                                             <tr>
-                                                <th scope="row">2</th>
-                                                <td>Orphans</td>
-                                                <td>20</td>
+                                                <th scope="row">{{forloop.counter}}</th>
+                                                <td>{{key}}</td>
+                                                <td>{{values}}</td>
                                             </tr>
+                                        {% endfor %}
+
                                         </tbody>
                                     </table>
 
@@ -316,20 +282,30 @@
                                         <tbody>
                                             <tr>
                                                 <th scope="row">1</th>
-                                                <td>AUD</td>
-                                                <td>12</td>
+                                                <td>AUDIOS</td>
+                                                <td>{{countAUD}}</td>
                                             </tr>
 
                                             <tr>
                                                 <th scope="row">2</th>
-                                                <td>VID</td>
-                                                <td>2</td>
+                                                <td>VIDEOS</td>
+                                                <td>{{countVID}}</td>
                                             </tr>
 
                                             <tr>
                                                 <th scope="row">3</th>
-                                                <td>TXT</td>
-                                                <td>65</td>
+                                                <td>TEXTS</td>
+                                                <td>{{countTXT}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">3</th>
+                                                <td>SMS</td>
+                                                <td>{{countSMS}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">3</th>
+                                                <td>IMAGES</td>
+                                                <td>{{countIMG}}</td>
                                             </tr>
                                             
                                         </tbody>
@@ -357,30 +333,18 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
                                                 <th>Time to Live</th>
                                                 <th>Number</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>02</td>
-                                                <td>1</td>
-                                            </tr>
+                                        {% for key,values in TtlFinalVal.items %}
 
                                             <tr>
-                                                <th scope="row">2</th>
-                                                <td>03</td>
-                                                <td>2</td>
+                                                <td>{{key}}</td>
+                                                <td>{{values}}</td>
                                             </tr>
-
-                                            <tr>
-                                                <th scope="row">3</th>
-                                                <td>32</td>
-                                                <td>6</td>
-                                            </tr>
-                                            
+                                        {% endfor %}
                                         </tbody>
                                     </table>
 
@@ -411,15 +375,6 @@
     </div>
 
     <script src="{% static "js/bootstrap.min.js" %}"></script>
-
-    <!-- chart js -->
-    <script src="{% static "js/chartjs/chart.min.js" %}"></script>
-    <!-- bootstrap progress js -->
-    <script src="{% static "js/progressbar/bootstrap-progressbar.min.js" %}"></script>
-    <script src="{% static "js/nicescroll/jquery.nicescroll.min.js" %}"></script>
-    <!-- icheck -->
-    <script src="{% static "js/icheck/icheck.min.js"  %}"></script>
-
     <script src="{% static "js/custom.js" %}"></script>
 
 </body>
