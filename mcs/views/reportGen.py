@@ -92,6 +92,25 @@ def reportGen(request):
 	for key, values in context['HealthData'].iteritems():
 		Data.append([key  , str(values)])
 
+	Data.append(["",""])
+	Data.append(["<b> Shelter Situation</b>", "<b>Information</b>"])
+	
+
+	context = {}
+	context['Shelter'] =  Shelter.objects.values_list()
+	context['ShelterData'] = {}
+
+	for listItems in context['Shelter']:
+		if listItems[1] in context['ShelterData']:
+			context['ShelterData'][listItems[1]] = context['ShelterData'][listItems[1]] + int(listItems[2])
+		else:	
+			context['ShelterData'][listItems[1]] = listItems[2]
+	
+	for key, values in context['ShelterData'].iteritems():
+		Data.append([key  , str(values)])	
+
+
+
 	context['countIMG'] = Files.objects.filter(Type='IMG').count()
 	context['countVID'] = Files.objects.filter(Type='VID').count()
 	context['countSMS'] = Files.objects.filter(Type='SMS').count()

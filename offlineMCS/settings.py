@@ -120,7 +120,7 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'format' : "[%(asctime)s],%(levelname)s,[%(name)s:%(lineno)s],%(message)s",
             'datefmt' : "%d/%b/%Y %H:%M:%S"
         },
     },
@@ -132,7 +132,7 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': "../offlinemcs/logfile",
+            'filename': "../offlinemcs/offlineMCS_log.csv",
             'maxBytes': 50000,
             'backupCount': 2,
             'formatter': 'standard',

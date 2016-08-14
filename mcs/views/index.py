@@ -50,7 +50,7 @@ def insertToSpecificTable(filePath, fileType, fileModelObj):
 def extractFileInfo(fileName):
 	info = fileName.split("_")
 	if len(info) != 9:
-		log.error(str(fileName) + ": Wrong file structure")
+		log.error(str(fileName) + "," + "Wrong file structure")
 		return 0
 	fileInfo = {}
 	fileInfo['type'] = info[0]
@@ -79,6 +79,7 @@ def checkAndInsert(filePath):
 				  lon=FileInfo['long'],
 				  lat=FileInfo['lat'],
 				  DateTime=FileInfo['datetime'], Ttl=FileInfo['ttl'], GroupId = FileInfo['groupId'])
+		log.info(str(fileName) + "," +"inserted into DB")
 		f.save()
 		if(insertToSpecificTable(filePath, FileInfo['type'], f)):
 			return 1
@@ -106,9 +107,7 @@ def index(request):
    		sum1 += pair[1]
 
 	if context['countAllFiles'] > 0:
-   		print context['latlong']
 	   	context['latlongAvg'] = (sum/context['countAllFiles'],sum1/context['countAllFiles'])
-	   	print context['latlongAvg']
 	else:
 		context['latlongAvg'] = (23.548822,87.29262)   	
    	
@@ -133,7 +132,5 @@ def sync(request):
 
 	i = 0
 	for filePath in allFilePaths:
-		print filePath
 		i += checkAndInsert(filePath)
-	print(str(i) + " Files inserted")
 	return redirect(index)
