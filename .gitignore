@@ -3,3 +3,8 @@ db.sqlite3
 map
 sync
 venv/*
+tiles
+offlineMCS_log.csv
+offlinemcs_nginx.conf
+hs_err_pid21365.log
+offlineMap
