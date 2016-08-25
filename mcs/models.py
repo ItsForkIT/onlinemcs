@@ -68,3 +68,8 @@ class SaveSMS(models.Model):
     Destination = models.CharField(max_length=255, db_index=True)
     Designation = models.CharField(max_length=255, db_index = True)
     DateTime = models.DateTimeField(default=timezone.now)
+
+class Task(models.Model):
+    completed = models.BooleanField(default=False)
+    title = models.CharField(max_length=100)
+    description = models.TextField()

@@ -26,7 +26,7 @@ def audioView(request):
 
 def videoView(request):
 	context = {}
-	context['vidList'] = Files.objects.filter(Type='VID')
+	context['vidList'] = Files.objects.filter(Type='VID').order_by('-DateTime')
 	
 	return render(request, 'mcs/videos.html', context)
 
