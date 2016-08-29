@@ -3,8 +3,9 @@ from mcs.models import *
 import glob
 from os import path
 from django.shortcuts import redirect
-from datetime import datetime
+import time,datetime
 import logging
+
 log = logging.getLogger(__name__)
 
 RELATIVE_PATH_TO_SYNC = "../dms/sync/*"
@@ -13,14 +14,15 @@ def insertToSpecificTable(filePath, fileType, fileModelObj):
 	if(fileType == 'SMS'):
 		fileObj = open(filePath, 'r')
 		message = str(fileObj.read())
-		sentiment = TextBlob(message).sentiment.polarity
-		uTxtObj = UnstructuredTXT(Content=message, File=fileModelObj,
-								  SentimentPolarity=sentiment)
-		uTxtObj.save()
+		#sentiment = TextBlob(message).sentiment.polarity
+		#uTxtObj = UnstructuredTXT(Content=message, File=fileModelObj,
+		#						  SentimentPolarity=sentiment)
+		#uTxtObj.save()
 		return 1
 	if(fileType == 'TXT'):
 		fileObj = open(filePath, 'r')
 		message = str(fileObj.read())
+
 
 		messageLineSplit = message.split('\n')
 		for mesg in messageLineSplit:
@@ -59,7 +61,7 @@ def extractFileInfo(fileName):
 	fileInfo['destination'] = info[4]
 	fileInfo['lat'] = info[5]
 	fileInfo['long'] = info[6]
-	fileInfo['datetime'] = datetime.strptime(info[7], '%Y%m%d%H%M%S')
+	fileInfo['datetime'] = datetime.datetime.strptime(info[7], '%Y%m%d%H%M%S')
 	fileInfo['groupId'] = info[8].split(".")[0]
 	return fileInfo
 
@@ -79,11 +81,16 @@ def checkAndInsert(filePath):
 				  lon=FileInfo['long'],
 				  lat=FileInfo['lat'],
 				  DateTime=FileInfo['datetime'], Ttl=FileInfo['ttl'], GroupId = FileInfo['groupId'])
+
 		log.info(str(fileName) + "," +"inserted into DB")
 		f.save()
 		if(insertToSpecificTable(filePath, FileInfo['type'], f)):
 			return 1
 	return 0
+
+
+#	test = Files.objects.filter(DateTime__range=(first_date,last_date))
+
 
 def fileStruct():
 	fileLatLangTable = {}
@@ -97,8 +104,35 @@ def index(request):
 	context['countVID'] = Files.objects.filter(Type='VID').count()
 	context['countSMS'] = Files.objects.filter(Type='SMS').count()
 	context['countTXT'] = Files.objects.filter(Type='TXT').count()
-	context['countAUD'] = Files.objects.filter(Type='AUD').count()
+	context['countAUD'] = Files.objects.filter(Type='SVS').count()
 	allFiles = Files.objects.all()
+	'''
+	# Range query to retrieve files between dates
+	minFileDateTime = Files.objects.all().aggregate(Min('DateTime')).itervalues().next()
+	maxFileDateTime = Files.objects.all().aggregate(Max('DateTime')).itervalues().next()
+	minFileDateTimeParsed = minFileDateTime.strftime('%Y%m%d%H%M%S')
+	maxFileDateTimeParsed = maxFileDateTime.strftime('%Y%m%d%H%M%S')
+	print minFileDateTime 
+	print maxFileDateTime
+
+	# Time Slice to divide the time
+	timeSlice = 15
+
+	noOfClusters = 0
+
+	# Increment Counter in timeSlice
+	delta = datetime.timedelta(minutes=timeSlice)
+	while minFileDateTime <= maxFileDateTime:
+		#minFileTime = datetime.datetime.strptime(minFileDateTime,'%Y%m%d%H%M%S')
+		#maxFileTime = datetime.datetime.strptime(maxFileDateTime,'%Y%m%d%H%M%S')
+		allFilesRange = Files.objects.filter(DateTime__range=(minFileDateTime,maxFileDateTime))
+		print allFilesRange
+		noOfClusters += 1
+		minFileDateTime += delta
+		
+
+	print 'No. of Clusters : ' + str(noOfClusters)
+	'''
 	context['latlong'] = [(i.lat, i.lon, i.Name) for i in allFiles]
 	sum = 0
 	sum1 = 0

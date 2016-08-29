@@ -21,7 +21,7 @@ def imageView(request):
 
 def audioView(request):
 	context = {}
-	context['audioList'] = Files.objects.filter(Type='AUD')
+	context['audioList'] = Files.objects.filter(Type='SVS')
 	return render(request, 'mcs/audios.html', context)
 
 def videoView(request):
