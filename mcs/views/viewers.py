@@ -6,7 +6,7 @@ from collections import Counter
 from django.http import HttpResponse	
 
 def imageView(request):
-	image_list = Files.objects.filter(Type='IMG').order_by('-DateTime')
+	image_list = Files.objects.filter(Type='IMG').order_by('DateTime')
 	paginator = Paginator(image_list, 10) # Show 25 contacts per page
 
 	page = request.GET.get('page')
