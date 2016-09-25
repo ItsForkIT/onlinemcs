@@ -20,16 +20,16 @@
 
     <!-- Custom styling plus plugins -->
     <link href="{% static "css/custom.css" %}" rel="stylesheet">
+    <link href="{% static "css/L.Grid.css" %}" rel="stylesheet">
   
-    <script src="{% static "js/jquery.min.js" %}"></script>
-    
     <!-- Offline Map Start -->
     <!-- leaflet -->
     <link rel="stylesheet" href="{% static "css/leaflet.css" %}" />
 
  	<link rel="stylesheet" href="{% static "css/MarkerCluster.Default.css" %}" />
   
- 
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    
 </head>
 
 
@@ -173,8 +173,8 @@
                             </div>
 
                             <div class="col-md-9 col-sm-9 col-xs-12" style="border:1px solid darkcyan; box-shadow: 0 2px 2px darkcyan"">
-                                    <div id="map" style="overflow:hidden;" onclick="toggleFullScreen()"></div>
-
+                                    <!--<div id="map" style="overflow:hidden;" onclick="toggleFullScreen()"></div>-->
+                                    <div id="map" style="overflow:hidden;"></div>
                             </div>
                             <div class="col-md-3 col-sm-2 col-xs-12" style="padding-left:2%;">
                                 <div class="x_title">
@@ -265,6 +265,8 @@
     <script src="{% static "js/custom.js" %}"></script>
     <script src="{% static "js/leaflet_cluster.js" %}"></script>
     <script  src="{% static "js/markerclusterer.js" %}"></script>
+    <script  src="{% static "js/L.Grid.js" %}"></script>
+    <script  src="{% static "js/leaflet-heat.js" %}"></script>
     <!-- Map setup -->
     <script>
         var map = L.map('map');
@@ -276,8 +278,32 @@
         });
 
         layer.addTo(map);
+        L.grid().addTo(map);
 
-        map.setView([23.9878,88.1261],11);
+        var situationalDataTypeColor = {}
+        situationalDataTypeColor['Victim'] = L.icon({
+            iconUrl: "{% static "images/victim.png" %}",
+            
+            iconSize:     [35, 35], // size of the icon
+        });
+        situationalDataTypeColor['Health'] = L.icon({
+            iconUrl:  "{% static "images/health.png" %}",
+            
+            iconSize:     [35, 35], // size of the icon
+        });
+        situationalDataTypeColor['Food'] = L.icon({
+            iconUrl:  "{% static "images/food.png" %}",
+            
+            iconSize:     [35, 35], // size of the icon          
+        });
+        situationalDataTypeColor['Shelter'] = L.icon({
+            iconUrl: "{% static "images/shelter.png" %}",
+            
+            iconSize:     [35, 35], // size of the icon
+           
+        });
+
+        map.setView([23.939414085793505,88.11299884995641],15);
         
 
 		var markerClusters = L.markerClusterGroup({
@@ -285,15 +311,16 @@
          });
 		
         {% for i,j,fname in  latlong %}		 
-		 var m = L.marker([{{ i }}, {{ j }}]).bindPopup('{{fname}}');
-        //var latlangs= [[23.54, 87.23], [23.54112, 87.23121]];
-        // var polyline = L.polyline(latlangs,{color: 'red'}).addTo(map);
-		  markerClusters.addLayer( m );
-          //map.fitBounds(polyline.getBounds());
-		{% endfor %}		 
+        console.log('{{fname}}');
+		 var m = L.marker([{{ i }}, {{ j }}],{icon: situationalDataTypeColor['{{fname}}']});
+         markerClusters.addLayer( m );
+        {% endfor %}		 
 		map.addLayer( markerClusters );
+        L.grid({
+                redraw: 'moveend'
+            }).addTo(map);
 
-
+        
         //***********************************************************************************************
     </script>
     <script type="text/javascript">

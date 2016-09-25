@@ -32,15 +32,15 @@ def insertToSpecificTable(filePath, fileType, fileModelObj):
 				strTxtObj = Health(Type=messageSplit[1],Quantity=messageSplit[2],File=fileModelObj)
 				strTxtObj.save()
 			if(messageSplit[0] == 'Shelter'):
-				strTxtObj = Shelter(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
+				strTxtObj = Shelter(Type=messageSplit[1],Quantity=messageSplit[2],File=fileModelObj)
 				strTxtObj.save()    	
 			
 			if(messageSplit[0] == 'Victim'):
-				strTxtObj = Victims(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
+				strTxtObj = Victims(Type=messageSplit[1],Quantity=messageSplit[2],File=fileModelObj)
 				strTxtObj.save()    	
 			
 			if(messageSplit[0] == 'Food'):
-				strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
+				strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2],File=fileModelObj)
 				strTxtObj.save()
 			
 			if(messageSplit[0] == 'Areas'):
@@ -133,7 +133,7 @@ def index(request):
 
 	print 'No. of Clusters : ' + str(noOfClusters)
 	'''
-	context['latlong'] = [(i.lat, i.lon, i.Name) for i in allFiles]
+	context['latlong'] = [(i.lat, i.lon, i.Name.split("_")[2]) for i in allFiles]
 	sum = 0
 	sum1 = 0
 	for pair in context['latlong']:
