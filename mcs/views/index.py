@@ -43,9 +43,9 @@ def insertToSpecificTable(filePath, fileType, fileModelObj):
 				strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2],File=fileModelObj)
 				strTxtObj.save()
 			
-			if(messageSplit[0] == 'Areas'):
-				strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
-				strTxtObj.save()	
+			#if(messageSplit[0] == 'Areas'):
+			#	strTxtObj = Food(Type=messageSplit[1],Quantity=messageSplit[2], File=fileModelObj)
+			#	strTxtObj.save()	
 	return 1
 
 

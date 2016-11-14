@@ -16,8 +16,8 @@ urlpatterns = [
     url(r'^editProfile$', views.editProfile, name='editProfile'),
     url(r'^tasks/$', views.tasks.task_list, name='task_list'),
    # url(r'^tasks/(?P<pk>[0-9]+)$', 'task_detail', name='task_detail'),
-
 ]
+
 if settings.DEBUG:
     # static files (images, css, javascript, etc.)
     urlpatterns += patterns('',
