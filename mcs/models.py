@@ -34,7 +34,6 @@ class Health(models.Model):
     Quantity = models.IntegerField()
     File = models.ForeignKey(Files)
 
-
 class Shelter(models.Model):
     Type = models.CharField(max_length=255, db_index=True)
     Quantity = models.IntegerField()
@@ -68,3 +67,12 @@ class SaveSMS(models.Model):
     Destination = models.CharField(max_length=255, db_index=True)
     Designation = models.CharField(max_length=255, db_index = True)
     DateTime = models.DateTimeField(default=timezone.now)
+
+class Task(models.Model):
+    completed = models.BooleanField(default=False)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+
+#class SummarizedFiles(models.Model):
+ #   File = models.ForeignKey(Files)
+    

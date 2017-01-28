@@ -26,6 +26,8 @@ def tabularAnalysis(request):
 			context['HealthData'][listItems[1]] = listItems[2]
 
 	context['Food'] =  Food.objects.values_list()
+	print 'Food:'
+	print context['Food']
 
 	context['FoodData'] = {}
 

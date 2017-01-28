@@ -25,7 +25,7 @@ SECRET_KEY = '5di&8=tg7k^o$f9wujgp*(o!x5u=!dq$uz8i1g)zf0m57n%qty'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'task',
 )
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -160,3 +163,11 @@ LOGGING = {
         },
     }
 }
+'''
+CACHES = {
+   'default': {
+      'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+      'LOCATION': 'unix:/tmp/memcached.sock',
+   }
+}
+'''

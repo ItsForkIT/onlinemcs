@@ -14,14 +14,28 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.styles import ParagraphStyle
 from django.http import HttpResponse	
 from mcs.models import *
+from reportlab.lib.units import inch
+from django.db.models import Max,Min
+import datetime
+import itertools
+from math import radians, cos, sin, asin, sqrt
+import os
+
+# Show * (Subject to Moderation) if value more than threshold
+subjectToModerationMin = 200
+minDist = 100
+
+def findSimilarPatterns(allFilesRange):
+	# Compare all the elements with one another in list
+	for files in allFilesRange:
+		print files
+	#for file1,file2 in itertools.combinations(allFilesRange,2):
+			#print file1.File.Name + ',' + file2.File.Name
 
 def reportGen(request):
 	response = HttpResponse(content_type='application/pdf')
-	#response['Content-Disposition'] = 'attachement; filename=acs.pdf'
 	doc = SimpleDocTemplate(response, pagesize=A4, rightMargin=30,leftMargin=30, topMargin=30,bottomMargin=18)
 	doc.pagesize = portrait(A4)
-
-	
 
 	h1 = PS(
 			name = 'Heading1',
@@ -45,6 +59,7 @@ def reportGen(request):
 	
 	context = {}
 	context['Food'] =  Food.objects.values_list()
+
 	context['FoodData'] = {}
 
 	for listItems in context['Food']:
@@ -53,11 +68,15 @@ def reportGen(request):
 		else:	
 			context['FoodData'][listItems[1]] = listItems[2]
 
+
 	Data = [
 		["<b>Food Type Requirement</b>", "<b>Information</b>", ],
 	]
 	
 	for key, values in context['FoodData'].iteritems():
+		if values > subjectToModerationMin:
+			values = str(values) + '*'
+		
 		Data.append([key  , str(values)])
 
 	Data.append(["",""])
@@ -65,6 +84,8 @@ def reportGen(request):
 	
 	context = {}
 	context['Victim'] =  Victims.objects.values_list()
+	checkJoin = Victims.objects.select_related('File')
+	
 	context['VictimData'] = {}
 
 	for listItems in context['Victim']:
@@ -72,8 +93,12 @@ def reportGen(request):
 			context['VictimData'][listItems[1]] = context['VictimData'][listItems[1]] + int(listItems[2])
 		else:	
 			context['VictimData'][listItems[1]] = listItems[2]
-	
+
+
 	for key, values in context['VictimData'].iteritems():
+		# Subject to moderation
+		if values > subjectToModerationMin:
+			values = str(values) + '*'
 		Data.append([key  , str(values)])
 
 	Data.append(["",""])
@@ -90,6 +115,10 @@ def reportGen(request):
 			context['HealthData'][listItems[1]] = listItems[2]
 	
 	for key, values in context['HealthData'].iteritems():
+		# Subject to moderation
+		if values > subjectToModerationMin:
+			values = str(values) + '*'
+		
 		Data.append([key  , str(values)])
 
 	Data.append(["",""])
@@ -98,6 +127,7 @@ def reportGen(request):
 
 	context = {}
 	context['Shelter'] =  Shelter.objects.values_list()
+	#print context['Shelter']
 	context['ShelterData'] = {}
 
 	for listItems in context['Shelter']:
@@ -107,6 +137,10 @@ def reportGen(request):
 			context['ShelterData'][listItems[1]] = listItems[2]
 	
 	for key, values in context['ShelterData'].iteritems():
+		# Subject to moderation
+		if values > subjectToModerationMin:
+			values = str(values) + '*'
+		
 		Data.append([key  , str(values)])	
 
 
@@ -115,7 +149,7 @@ def reportGen(request):
 	context['countVID'] = Files.objects.filter(Type='VID').count()
 	context['countSMS'] = Files.objects.filter(Type='SMS').count()
 	context['countTXT'] = Files.objects.filter(Type='TXT').count()
-	context['countAUD'] = Files.objects.filter(Type='AUD').count()	
+	context['countAUD'] = Files.objects.filter(Type='SVS').count()	
 
 	Data.append(["",""])
 	Data.append(["<b>Types of Files in DropBox</b>","<b>Information</b>"])
@@ -139,6 +173,8 @@ def reportGen(request):
 	               ('BOX', (0,0), (-1,-1), 0.25, colors.black),
 	               ])
 
+	elements.append(Paragraph('<b>* - Subject to Moderation </b>',h2))
+
 	#Configure style and word wrap
 	s = getSampleStyleSheet()
 	s = s["BodyText"]
@@ -148,7 +184,6 @@ def reportGen(request):
 	t=Table(Data2)
 
 	t.setStyle(style)
-	
 
 	#Send the data and build the file
 	elements.append(t)
