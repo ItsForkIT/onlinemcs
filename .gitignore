@@ -9,3 +9,4 @@ offlinemcs_nginx.conf
 hs_err_pid21365.log
 offlineMap
 offlineMCS_log.csv
+static/geojson/*
