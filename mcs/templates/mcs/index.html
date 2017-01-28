@@ -29,6 +29,7 @@
  	<link rel="stylesheet" href="{% static "css/MarkerCluster.Default.css" %}" />
   
     <script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/leaflet.ajax.min.js" %}"></script>
     
 </head>
 
@@ -319,6 +320,14 @@
         L.grid({
                 redraw: 'moveend'
             }).addTo(map);
+
+        // Added geojson 
+        var geojsonfeature = $.getJSON("{% static "sampleGeoJson/sample.geojson" %}", 
+        function(data){
+        	console.log(data);
+            L.geoJson(data).addTo(map);
+        }
+        );
 
         
         //***********************************************************************************************
