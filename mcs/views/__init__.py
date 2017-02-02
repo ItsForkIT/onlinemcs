@@ -1,7 +1,6 @@
 
 from django.db.models import *
 from datetime import datetime
-from textblob import TextBlob
 from collections import Counter
 import os
 
