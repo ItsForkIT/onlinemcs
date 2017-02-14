@@ -26,7 +26,7 @@
     <!-- leaflet -->
     <link rel="stylesheet" href="{% static "css/leaflet.css" %}" />
 
- 	<link rel="stylesheet" href="{% static "css/MarkerCluster.Default.css" %}" />
+    <link rel="stylesheet" href="{% static "css/MarkerCluster.Default.css" %}" />
   
     <script src="{% static "js/jquery.min.js" %}"></script>
     <script src="{% static "js/leaflet.ajax.min.js" %}"></script>
@@ -174,7 +174,7 @@
                             </div>
 
                             <div class="col-md-9 col-sm-9 col-xs-12" style="border:1px solid darkcyan; box-shadow: 0 2px 2px darkcyan"">
-                                    <!--<div id="map" style="overflow:hidden;" onclick="toggleFullScreen()"></div>-->
+                                   <!-- <div id="map" style="overflow:hidden;" onclick="toggleFullScreen()"></div> -->
                                    <div id="map" style="overflow:hidden;"></div>
                             </div>
                             <div class="col-md-3 col-sm-2 col-xs-12" style="padding-left:2%;">
@@ -271,8 +271,7 @@
     <!-- Map setup -->
     <script>
         var map = L.map('map');
-
-
+	
         var layer = Tangram.leafletLayer({
             scene: "{% static "map/scene.json"%}",
             attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors | <a href="https://mapzen.com/" target="_blank">Mapzen</a>'
@@ -280,7 +279,7 @@
 
         layer.addTo(map);
         L.grid().addTo(map);
-
+        
         var situationalDataTypeColor = {}
         situationalDataTypeColor['Victim'] = L.icon({
             iconUrl: "{% static "images/victim.png" %}",
@@ -304,73 +303,44 @@
            
         });
 
-        map.setView([23.5488104,87.2965482],9);
+        map.setView([23.54,87.2965482],8);
         
 
-		var markerClusters = L.markerClusterGroup({
+        var markerClusters = L.markerClusterGroup({
           maxClusterRadius: 80,
          });
-		
-        {% for i,j,fname in  latlong %}		 
-			var m = L.marker([{{ i }}, {{ j }}],{icon: situationalDataTypeColor['{{fname}}']});
-			markerClusters.addLayer( m );
-        {% endfor %}		 
-		map.addLayer( markerClusters );
-        L.grid({
-                redraw: 'moveend'
-            }).addTo(map);
-
-        var geojsonMarkerOptions = {
-		    radius: 8,
-		    fillColor: "#ff7800",
-		    color: "#000",
-		    weight: 1,
-		    opacity: 1,
-		    fillOpacity: 0.8
-		};
-
-		var textPopup;
-		function onEachFeature(feature, layer) {
-			var popupContent = "<p>GIS Type: " +
-					feature.geometry.type +  ", GIS Text: " + textPopup + "!</p>";
-
-			if (feature.properties && feature.properties.popupContent) {
-				popupContent += feature.properties.popupContent;
-			}
-
-			layer.bindPopup(popupContent);
-		}
+        
+        {% for i,j,fname in  latlong %}
+            var type = '{{fname}}';
+            if(type != 'Gis')
+            {   
+                var m = L.marker([{{ i }}, {{ j }}],{icon: situationalDataTypeColor['{{fname}}']}).addTo(map);
+            }
+            //markerClusters.addLayer( m );
+        {% endfor %}         
+        //map.addLayer( markerClusters );
         // Added geojson 
+        var geojsonLayer = 0;
+        if(map.hasLayer(geojsonLayer))
+        {
+            map.removeLayer(geojsonLayer);    
+        }
+        
         var geojsonfeature = $.getJSON("{% static "sampleGeoJson/sample.geojson" %}", 
-	        function(data){
-	        	console.log(data['features']['0']['properties']['TEXT']);
-	        	textPopup = data['features']['0']['properties']['TEXT'];
-	            L.geoJson(data, {
-
-				style: function (feature) {
-					return feature.properties && feature.properties.style;
-				},
-
-				onEachFeature: onEachFeature,
-
-				pointToLayer: function (feature, latlng) {
-					return L.circleMarker(latlng, {
-						radius: 8,
-						fillColor: "#ff7800",
-						color: "#000",
-						weight: 1,
-						opacity: 1,
-						fillOpacity: 0.8
-					});
-				}
-			}).addTo(map);
-				}
+            function(dataGeo){
+                console.log(dataGeo);
+                geojsonLayer = L.geoJson(dataGeo);
+                geojsonLayer.addTo(map);
+                console.log(map.hasLayer(geojsonLayer));
+                //L.geoJson(dataGeo).addTo(map);
+            }
         );
 
         
         //***********************************************************************************************
     </script>
     <script type="text/javascript">
+
          function toggleFullScreen()
          {
                  var elem = document.getElementById("map");

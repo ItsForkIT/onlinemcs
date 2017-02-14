@@ -58,11 +58,8 @@ def getCleanedFeatures(pathToGeoJson):
             coords = feature['geometry']['coordinates']
             newcoords = []
             for coord in coords:
-                # print("************")
-                # print(latlon)
                 newcoord = metres2degrees(coord)
                 newcoords.append(newcoord)
-            # print(newcoords)
             feature['geometry']['coordinates'] = newcoords
             allFeatures.append(feature)
             # print(jsonObj)
