@@ -106,6 +106,8 @@
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="/analysis/graphical">Graphical</a>
                                         </li>
+                                        <li><a href="/analysis/embs">EMBS</a>
+                                        </li>
                                         <li><a href="/analysis/tables">Tabular</a>
                                         </li>
                                     </ul>
@@ -213,8 +215,8 @@
                             </div>
 
                             <div class="col-md-9 col-sm-9 col-xs-12" style="border:1px solid darkcyan; box-shadow: 0 2px 2px darkcyan"">
-                                   <!-- <div id="map" style="overflow:hidden;" onclick="toggleFullScreen()"></div> -->
-                                   <div id="map" style="overflow:hidden;"></div>
+                                   <div id="map" style="overflow:hidden;" onclick="toggleFullScreen()"></div>
+                                   <!--<div id="map" style="overflow:hidden;"></div>-->
                             </div>
                             <div class="col-md-3 col-sm-2 col-xs-12" style="padding-left:2%;">
                                 <div class="x_title">
@@ -342,7 +344,7 @@
            
         });
 
-        map.setView([23.54,87.2965482],8);
+        map.setView([23.5422, 87.2515],14);
         
         
         {% for i,j,fname in  latlong %}

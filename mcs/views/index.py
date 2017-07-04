@@ -11,7 +11,7 @@ from .utils import manageGis
 
 log = logging.getLogger(__name__)
 
-RELATIVE_PATH_TO_SYNC = "../dms/sync/*"
+RELATIVE_PATH_TO_SYNC = "../DMS/sync/*"
 RELATIVE_PATH_TO_GIS = "static/geojson/"
 RELATIVE_PATH_TO_TARGET_GIS = "static/sampleGeoJson/sample.geojson"
 
