@@ -1,7 +1,6 @@
 
 from django.db.models import *
 from datetime import datetime
-from textblob import TextBlob
 from collections import Counter
 import os
 
@@ -13,5 +12,5 @@ from sms import *
 from reportGen import *
 from editProfile import *
 from tasks import *
-
-
+from embs import *
+from missing import *

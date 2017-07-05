@@ -26,11 +26,50 @@
     <!-- leaflet -->
     <link rel="stylesheet" href="{% static "css/leaflet.css" %}" />
 
- 	<link rel="stylesheet" href="{% static "css/MarkerCluster.Default.css" %}" />
+    <link rel="stylesheet" href="{% static "css/MarkerCluster.Default.css" %}" />
   
     <script src="{% static "js/jquery.min.js" %}"></script>
-    <script src="{% static "js/leaflet.ajax.min.js" %}"></script>
-    
+    <script src="{% static "js/leaflet.js" %}"></script>
+    <style type="text/css">
+        div.stars {
+          width: 270px;
+          display: inline-block;
+        }
+
+        input.star { display: none; }
+
+        label.star {
+          float: right;
+          padding: 10px;
+          font-size: 36px;
+          color: #444;
+          transition: all .2s;
+        }
+
+        input.star:checked ~ label.star:before {
+          content: '\f005';
+          color: #FD4;
+          transition: all .25s;
+        }
+
+        input.star-5:checked ~ label.star:before {
+          color: #FE7;
+          text-shadow: 0 0 20px #952;
+        }
+
+        input.star-1:checked ~ label.star:before { color: #F62; }
+
+        label.star:hover { transform: rotate(-15deg) scale(1.3); }
+
+        label.star:before {
+          content: '\f006';
+          font-family: FontAwesome;
+        }
+        .leaflet-popup {
+        	z-index: 1000;
+        }
+    </style>   
+
 </head>
 
 
@@ -66,6 +105,8 @@
                                 <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="/analysis/graphical">Graphical</a>
+                                        </li>
+                                        <li><a href="/analysis/embs">EMBS</a>
                                         </li>
                                         <li><a href="/analysis/tables">Tabular</a>
                                         </li>
@@ -174,8 +215,8 @@
                             </div>
 
                             <div class="col-md-9 col-sm-9 col-xs-12" style="border:1px solid darkcyan; box-shadow: 0 2px 2px darkcyan"">
-                                    <!--<div id="map" style="overflow:hidden;" onclick="toggleFullScreen()"></div>-->
-                                   <div id="map" style="overflow:hidden;"></div>
+                                   <div id="map" style="overflow:hidden;" onclick="toggleFullScreen()"></div>
+                                   <!--<div id="map" style="overflow:hidden;"></div>-->
                             </div>
                             <div class="col-md-3 col-sm-2 col-xs-12" style="padding-left:2%;">
                                 <div class="x_title">
@@ -271,16 +312,15 @@
     <!-- Map setup -->
     <script>
         var map = L.map('map');
-
-
+		
         var layer = Tangram.leafletLayer({
             scene: "{% static "map/scene.json"%}",
             attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors | <a href="https://mapzen.com/" target="_blank">Mapzen</a>'
         });
-
+        L.layerGroup().clearLayers();
         layer.addTo(map);
-        L.grid().addTo(map);
-
+       // L.grid().addTo(map);
+        
         var situationalDataTypeColor = {}
         situationalDataTypeColor['Victim'] = L.icon({
             iconUrl: "{% static "images/victim.png" %}",
@@ -304,35 +344,54 @@
            
         });
 
-        map.setView([13.0288104,77.5365482],14);
+        map.setView([23.5422, 87.2515],14);
         
-
-		var markerClusters = L.markerClusterGroup({
-          maxClusterRadius: 80,
-         });
-		
-        {% for i,j,fname in  latlong %}		 
-        console.log('{{fname}}');
-		 var m = L.marker([{{ i }}, {{ j }}],{icon: situationalDataTypeColor['{{fname}}']});
-         markerClusters.addLayer( m );
-        {% endfor %}		 
-		map.addLayer( markerClusters );
-        L.grid({
-                redraw: 'moveend'
-            }).addTo(map);
-
+        
+        {% for i,j,fname in  latlong %}
+            var type = '{{fname}}';
+            if(type != 'Gis')
+            {   
+                var m = L.marker([{{ i }}, {{ j }}],{icon: situationalDataTypeColor['{{fname}}']}).addTo(map);
+            }
+        {% endfor %}         
+        
         // Added geojson 
-        var geojsonfeature = $.getJSON("{% static "sampleGeoJson/sample.geojson" %}", 
-        function(data){
-        	console.log(data);
-            L.geoJson(data).addTo(map);
-        }
-        );
-
+        var geojsonLayer = 0;
         
-        //***********************************************************************************************
+        function onEachFeature(feature, layer) {      
+               layer.on('click', function (e) {
+                  var popupContent = "Feature: " + feature.geometry.type + "<br/>FID : " + feature.properties.FID + "<br/>  Text : " + feature.properties.TEXT + "<br/>Rate us please:<div class='stars'><form action=''><input class='star star-5' id='star-5' type='radio' name='star'/><label class='star star-5' for='star-5'></label><input class='star star-4' id='star-4' type='radio' name='star'/><label class='star star-4' for='star-4'></label><input class='star star-3' id='star-3' type='radio' name='star'/><label class='star star-3' for='star-3'></label><input class='star star-2' id='star-2' type='radio' name='star'/><label class='star star-2' for='star-2'></label><input class='star star-1' id='star-1' type='radio' name='star'/><label class='star star-1' for='star-1'></label></form></div>";
+                    
+                    layer.bindPopup(popupContent);
+                });
+        }
+        var geojsonfeature = $.getJSON("{% static "sampleGeoJson/sample.geojson" %}", 
+            function(dataGeo) {
+                geojsonLayer = L.geoJson(dataGeo,{
+                  style: function(feature) {
+                    return {
+                      "color": "#78c679",
+                      "weight": 5,
+                      "opacity": 0.9,
+                      "zIndex" : 100
+                    }
+                  },
+                  // Put onEachFeature within the options object, not as 3rd argument.
+                  onEachFeature: onEachFeature
+                });
+                geojsonLayer.addTo(map);
+            }
+        );
+        if(map.hasLayer(geojsonLayer))
+        {
+            console.log("has layer");
+            map.removeLayer(geojsonLayer);    
+        }
+        
+        
     </script>
     <script type="text/javascript">
+
          function toggleFullScreen()
          {
                  var elem = document.getElementById("map");

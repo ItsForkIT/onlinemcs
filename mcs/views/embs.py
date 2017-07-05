@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from mcs.models import *
 
-def tabularAnalysis(request):
+def embs(request):
 	context = {}
 	context['countAllFiles'] = Files.objects.all().count()
 	context['countIMG'] = Files.objects.filter(Type='IMG').count()
@@ -9,13 +9,7 @@ def tabularAnalysis(request):
 	context['countSMS'] = Files.objects.filter(Type='SMS').count()
 	context['countTXT'] = Files.objects.filter(Type='TXT').count()
 	context['countAUD'] = Files.objects.filter(Type='AUD').count()
-
-	context['Ttl'] = Files.objects.values_list('Ttl', flat=True)
-	context['TtlVal'] = list()
-	for years in context['Ttl']:       
-		val1 = str(years) 
-		context['TtlVal'].append(val1)
-	
+	context['DateTime'] = Files.objects.values_list('DateTime', flat=True)
 	
 	context['Health'] =  Health.objects.values_list()
 	context['HealthData'] = {}
@@ -25,18 +19,11 @@ def tabularAnalysis(request):
 		else:	
 			context['HealthData'][listItems[1]] = listItems[2]
 
-	context['Shelter'] =  Shelter.objects.values_list()
-	context['ShelterData'] = {}
-	for listItems in context['Shelter']:
-		if listItems[1] in context['ShelterData']:
-			context['ShelterData'][listItems[1]] = context['ShelterData'][listItems[1]] + int(listItems[2])
-		else:	
-			context['ShelterData'][listItems[1]] = listItems[2]
-
-	context['Food'] =  Food.objects.values_list()
+	print context['HealthData']
 	
-	context['FoodData'] = {}
+	context['Food'] = Food.objects.values_list()
 
+	context['FoodData'] = {}
 	for listItems in context['Food']:
 		if listItems[1] in context['FoodData']:
 			context['FoodData'][listItems[1]] = context['FoodData'][listItems[1]] + int(listItems[2])
@@ -55,7 +42,30 @@ def tabularAnalysis(request):
 
 		else:	
 			context['VictimData'][listItems[1]] = listItems[2]
+			
+	for listItem in context['VictimData'].iteritems():
+		context['VictimDataPerc'][listItem[0]] = (listItem[1] * 100/sum(context['VictimData'].values()))
+		
+	context['years'] = list()
+	for years in context['DateTime']:
+		val1 = str(years)
+		
+		context['years'].append(val1[:7])
 
-	context['TtlFinalVal'] = {j:context['TtlVal'].count(j) for j in context['TtlVal']}
-   
-	return render(request, 'mcs/tables.html', context)
+	if context['countAllFiles'] > 0:
+		context['audioDistribution'] = ((context['countAUD'] * 100) /
+										context['countAllFiles'])
+		context['smsDistribution'] = ((context['countSMS'] * 100) /
+									  context['countAllFiles'])
+		context['imageDistribution'] = ((context['countIMG'] * 100) /
+										context['countAllFiles'])
+		context['txtDistribution'] = ((context['countTXT'] * 100) /
+									  context['countAllFiles'])
+		context['videoDistribution'] = ((context['countVID'] * 100) /
+										context['countAllFiles'])
+
+		context['countYears'] = {i:context['years'].count(i) for i in context['years']}
+		
+
+	return render(request, 'mcs/embs.html', context)
+

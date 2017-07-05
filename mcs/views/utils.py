@@ -48,10 +48,26 @@ def getCleanedFeatures(pathToGeoJson):
             feature['geometry']['coordinates'] = newcoords
             allFeatures.append(feature)
             # print(jsonObj)
+        if feature['geometry']['type'] == 'Point':
+            coords = feature['geometry']['coordinates']
+            newcoords = metres2degrees(coords)
+            feature['geometry']['coordinates'] = newcoords
+            allFeatures.append(feature)
+            # print(jsonObj)
+        if feature['geometry']['type'] == 'LineString':
+            coords = feature['geometry']['coordinates']
+            newcoords = []
+            for coord in coords:
+                newcoord = metres2degrees(coord)
+                newcoords.append(newcoord)
+            feature['geometry']['coordinates'] = newcoords
+            allFeatures.append(feature)
+            # print(jsonObj)
+    print(allFeatures)
     return allFeatures
 
 
-def getCleanedGeoJson(folderPath, geoJsonObj):
+def getAllCleanedFeatures(folderPath):
     allFiles = listdir(folderPath)
     allFeatures = []
     for filename in allFiles:
@@ -61,18 +77,18 @@ def getCleanedGeoJson(folderPath, geoJsonObj):
             # print(cleanedFeatures)
             allFeatures += cleanedFeatures
 
-    geoJsonObj['features'] = allFeatures
-    return json.dumps(geoJsonObj)
+    return allFeatures
 
 
 def manageGis(allFilePaths, RELATIVE_PATH_TO_GIS, RELATIVE_PATH_TO_TARGET_GIS):
+    pathToSampleGeoJson = path.abspath(RELATIVE_PATH_TO_TARGET_GIS)
+    fileObj = open(pathToSampleGeoJson, 'r')
+    geoJsonObj = json.loads(fileObj.read())
+    fileObj.close()
+    allFeatures = []
+
     for filePath in allFilePaths:
         fileName = path.basename(filePath)
-
-        pathToSampleGeoJson = path.abspath(RELATIVE_PATH_TO_TARGET_GIS)
-        fileObj = open(pathToSampleGeoJson, 'r')
-        geoJsonObj = json.loads(fileObj.read())
-        fileObj.close()
 
         if fileName[0:3] == "GIS":
             print("UNZIP-----------------------")
@@ -80,9 +96,12 @@ def manageGis(allFilePaths, RELATIVE_PATH_TO_GIS, RELATIVE_PATH_TO_TARGET_GIS):
                 RELATIVE_PATH_TO_GIS + "/" + fileName[0:-4])
             giszip = zipfile.ZipFile(filePath, "r")
             giszip.extractall(unzipPath)
-            cleanedGeoJson = getCleanedGeoJson(unzipPath,
-                                               geoJsonObj)
+            cleanedGeoJson = getAllCleanedFeatures(unzipPath)
             # print(cleanedGeoJson)
-            fileObj = open(pathToSampleGeoJson, "w")
-            fileObj.write(cleanedGeoJson)
-            fileObj.close()
+            allFeatures += cleanedGeoJson
+
+    geoJsonObj["features"] = allFeatures
+    print(geoJsonObj)
+    fileObj = open(pathToSampleGeoJson, "w")
+    fileObj.write(json.dumps(geoJsonObj))
+    fileObj.close()
