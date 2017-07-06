@@ -36,18 +36,11 @@
 # offlineMCS/wsgi.py: 12
 Django == 1.9.2
 
-# mcs/views/__init__.py: 16
-django-missing == 0.2.1
 
 # mcs/serializers.py: 1
 # mcs/views/tasks.py: 1,2,3
 djangorestframework == 3.4.4
 
-# mcs/views/__init__.py: 14
-gbh-tasks == 0.2
-
-# mcs/views/__init__.py: 7
-index == 0.2
 
 # mcs/serializers.py: 3
 # mcs/views/editProfile.py: 2
@@ -65,9 +58,6 @@ mcs == 0.3.7
 # mcs/views/index.py: 12
 python_firebase == 1.2
 
-# mcs/views/__init__.py: 14
-radish-parse-type == 0.3.5
-
 # mcs/bakviews.py: 22,23,24,25
 # mcs/views/reportGen.py: 8,9,10,11,13,14,17
 reportlab == 3.3.0
@@ -75,29 +65,9 @@ reportlab == 3.3.0
 # static/map/fetcher.py: 4
 requests == 2.9.1
 
-# mcs/views/__init__.py: 11
-sms == 0.4
-
-# mcs/views/__init__.py: 14
-stronglib == 0.1.5
-
-# mcs/views/__init__.py: 9
-tabular == 0.1
-
-# mcs/views/__init__.py: 14
-tasks-py == 1.0.3
-
-# mcs/views/__init__.py: 14
-tasks.sh == 0.0.1
-
-# mcs/views/__init__.py: 14
-testdocker == 0.2.5
-
 # mcs/bakviews.py: 9
 textblob == 0.11.0
 
-# mcs/views/__init__.py: 14
-tmpld == 0.2.3
 
 whitenoise == 3.3.0
 
