@@ -23,8 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5di&8=tg7k^o$f9wujgp*(o!x5u=!dq$uz8i1g)zf0m57n%qty'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+#DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = ['*']
 
 
@@ -83,10 +83,20 @@ WSGI_APPLICATION = 'offlineMCS.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
+   # 'default': dj_database_url.config(default='postgres://localhost:5432/postgres_db_name'),
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
+   # 'default': {
+   #      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+   #      'NAME': 'mcsdb',
+   #      'USER': 'hridoy',
+   #      'PASSWORD': ' ',
+   #  }
 }
 
 
@@ -116,7 +126,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
-
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # Logging module added
 LOGGING = {
     'version': 1,
