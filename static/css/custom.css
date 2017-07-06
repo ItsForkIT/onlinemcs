@@ -5303,7 +5303,7 @@ ul.project_files li a i {
     right: 0;
     bottom: 0;
     left: 0;
-    background: #fff url("../img/loading.gif") no-repeat center center;
+    background: #fff url("../images/loading.gif") no-repeat center center;
     opacity: .75;
     filter: alpha(opacity=75);
     z-index: 20140628;
@@ -5985,13 +5985,7 @@ header{width:100%;}
 /* Icons
  * -------------------------------------------------------------------------- */
 
-.icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-image: url("../../assets/img/icons.png");
-  vertical-align: middle;
-}
+
 
 .icon-move {
   background-position: 0 0;
