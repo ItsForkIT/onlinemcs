@@ -1,158 +1,8 @@
+{% extends "mcs/Abase.html" %}
 {% load static from staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>MCS Dashboard </title>
-
-    <!-- Bootstrap core CSS -->
-
-    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
-
-    <link href="{% static "fonts/css/font-awesome.min.css" %}" rel="stylesheet">
-<!--    <link href="{% static "css/animate.min.css" %}" rel="stylesheet">-->
-
-    <!-- Custom styling plus plugins -->
-    <link href="{% static "css/custom.css" %}" rel="stylesheet">
-    <link href="{% static "css/L.Grid.css" %}" rel="stylesheet">
-  
-    <!-- Offline Map Start -->
-    <!-- leaflet -->
-    <link rel="stylesheet" href="{% static "css/leaflet.css" %}" />
-
-    <link rel="stylesheet" href="{% static "css/MarkerCluster.Default.css" %}" />
-  
-    <script src="{% static "js/jquery.min.js" %}"></script>
-    <script src="{% static "js/leaflet.js" %}"></script>
-    <style type="text/css">
-        div.stars {
-          width: 270px;
-          display: inline-block;
-        }
-
-        input.star { display: none; }
-
-        label.star {
-          float: right;
-          padding: 10px;
-          font-size: 36px;
-          color: #444;
-          transition: all .2s;
-        }
-
-        input.star:checked ~ label.star:before {
-          content: '\f005';
-          color: #FD4;
-          transition: all .25s;
-        }
-
-        input.star-5:checked ~ label.star:before {
-          color: #FE7;
-          text-shadow: 0 0 20px #952;
-        }
-
-        input.star-1:checked ~ label.star:before { color: #F62; }
-
-        label.star:hover { transform: rotate(-15deg) scale(1.3); }
-
-        label.star:before {
-          content: '\f006';
-          font-family: FontAwesome;
-        }
-        .leaflet-popup {
-        	z-index: 1000;
-        }
-    </style>   
-
-</head>
-
-
-<body class="nav-md">
-
-    <div class="container body">
-
-
-        <div class="main_container">
-
-            <div class="col-md-3 left_col">
-                <div class="left_col scroll-view">
-
-                    <div class="navbar nav_title" style="border: 0;">
-                        <a href="/" class="site_title"><i class="fa fa-tasks"></i> <span>MCS Dashboard</span></a>
-                    </div>
-                    <div class="clearfix"></div>
-
-                                        
-                    <!-- /menu prile quick info -->
-
-                    <br />
-
-                    <!-- sidebar menu -->
-                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-
-                        <div class="menu_section">
-                            <h3>General</h3>
-                            <ul class="nav side-menu">
-                                <li><a href="/"><i class="fa fa-home"></i>Dashboard <span class="fa fa-circle"></span></a></li>
-                                <li><a href="/sync"><i class="fa fa-edit"></i> Sync <span class="label label-success pull-right">New Files</span></a>
-                                </li>
-                                <li><a><i class="fa fa-table"></i> Analysis <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu" style="display: none">
-                                        <li><a href="/analysis/graphical">Graphical</a>
-                                        </li>
-                                        <li><a href="/analysis/embs">EMBS</a>
-                                        </li>
-                                        <li><a href="/analysis/tables">Tabular</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                
-                                <li><a><i class="fa fa-desktop"></i> File Viewer <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu" style="display: none">
-                                        <li><a href="/filemanager/imageView">Images</a>
-                                        </li>
-                                        <li><a href="/filemanager/audioView">Audio</a>
-                                        </li>
-                                        <li><a href="/filemanager/videoView">Video</a>
-                                        </li>
-                                        <li><a href="/filemanager/groupView">Group View</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="/reportGen"><i class="fa fa-file-text"></i> Report Generation <span class="fa fa-circle"></span></a></li>
-                            </ul>
-                        </div>
-                        
-                    </div>
-                    <!-- /sidebar menu -->
-
-                   
-                </div>
-            </div>
-
-            <!-- top navigation -->
-            <div class="top_nav">
-
-                <div class="nav_menu" >
-                    <nav class="" role="navigation" style="margin-bottom:20px;">
-                        <div class="nav toggle">
-                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                        </div>
-                    </nav>
-                </div>
-
-            </div>
-            <!-- /top navigation -->
-
-
+{% block content %}
             <!-- page content -->
-            <div class="right_col" role="main">
+            
 
                 <!-- top tiles -->
                 <div class="row tile_count">
@@ -292,35 +142,38 @@
                         </div>
                     </div>
             </div>
-            </div>
  <!-- /page content -->
-
-        </div>
-
-    </div>
-    <!-- bootstrap progress js -->
-    <!--<script src="{% static "js/leaflet.js" %}"></script>-->
-        
-    <!-- Main tangram library -->
-    <script src="{% static "js/tangram.min.js" %}"></script>
-    <script src="{% static "js/progressbar/bootstrap-progressbar.min.js" %}"></script>
-    <script src="{% static "js/custom.js" %}"></script>
-    <script src="{% static "js/leaflet_cluster.js" %}"></script>
-    <script  src="{% static "js/markerclusterer.js" %}"></script>
-    <script  src="{% static "js/L.Grid.js" %}"></script>
-    <script  src="{% static "js/leaflet-heat.js" %}"></script>
     <!-- Map setup -->
-    <script>
-        var map = L.map('map');
-		
-        var layer = Tangram.leafletLayer({
-            scene: "{% static "map/scene.json"%}",
-            attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors | <a href="https://mapzen.com/" target="_blank">Mapzen</a>'
-        });
-        L.layerGroup().clearLayers();
-        layer.addTo(map);
-       // L.grid().addTo(map);
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
         
+        <script type="text/javascript">
+            //Google maps API initialisation
+            var element = document.getElementById("map");
+ 
+            var map = new google.maps.Map(element, {
+                center: new google.maps.LatLng(23.550097, 87.289751),
+                zoom: 16,
+                mapTypeId: "OSM",
+                mapTypeControl: false,
+                streetViewControl: false
+            });
+ 
+            //Define OSM map type pointing at the OpenStreetMap tile server
+            map.mapTypes.set("OSM", new google.maps.ImageMapType({
+                getTileUrl: function(coord, zoom) {
+                  // "Wrap" x (logitude) at 180th meridian properly
+                  var tilesPerGlobe = 1 << zoom;
+                  var x = coord.x % tilesPerGlobe;
+                  if (x < 0) x = tilesPerGlobe+x;
+                  return "https://tile.openstreetmap.org/" + zoom + "/" + x + "/" + coord.y + ".png";
+                },
+                tileSize: new google.maps.Size(256, 256),
+                name: "OpenStreetMap",
+                maxZoom: 18
+            }));
+        </script>
+    <script>
+    /*
         var situationalDataTypeColor = {}
         situationalDataTypeColor['Victim'] = L.icon({
             iconUrl: "{% static "images/victim.png" %}",
@@ -389,7 +242,6 @@
         }
         
         
-    </script>
     <script type="text/javascript">
 
          function toggleFullScreen()
@@ -409,6 +261,4 @@
         
     </script>
     <!-- /footer content -->
-</body>
-
-</html>
+{% endblock content %}
