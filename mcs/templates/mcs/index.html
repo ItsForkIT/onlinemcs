@@ -144,7 +144,7 @@
             </div>
  <!-- /page content -->
     <!-- Map setup -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCx6eitGAGv5IDefhePqqZnw9QsztD2DRM"></script>
         
     <script type="text/javascript">
         //Google maps API initialisation
@@ -152,7 +152,7 @@
 
         var map = new google.maps.Map(element, {
             center: new google.maps.LatLng(23.550097, 87.289751),
-            zoom: 16,
+            zoom: 14,
             mapTypeId: "OSM",
             mapTypeControl: false,
             streetViewControl: false
@@ -173,27 +173,10 @@
         }));
        
         var situationalDataTypeColor = {}
-        situationalDataTypeColor['Victim'] = L.icon({
-            url: "{% static "images/victim.png" %}",
-            
-            iconSize:     [35, 35], // size of the icon
-        });
-        situationalDataTypeColor['Health'] = L.icon({
-            url:  "{% static "images/health.png" %}",
-            
-            iconSize:     [35, 35], // size of the icon
-        });
-        situationalDataTypeColor['Food'] = L.icon({
-            url:  "{% static "images/food.png" %}",
-            
-            iconSize:     [35, 35], // size of the icon          
-        });
-        situationalDataTypeColor['Shelter'] = L.icon({
-            url: "{% static "images/shelter.png" %}",
-            
-            iconSize:     [35, 35], // size of the icon
-           
-        });
+        situationalDataTypeColor['Victim'] = "{% static "images/victim.png" %}";
+        situationalDataTypeColor['Health'] = "{% static "images/health.png" %}";
+        situationalDataTypeColor['Food'] = "{% static "images/food.png" %}";
+        situationalDataTypeColor['Shelter'] = "{% static "images/shelter.png" %}";
 
        // map.setView([23.5422, 87.2515],14);
          
@@ -202,14 +185,11 @@
             var type = '{{fname}}';
             if(type != 'Gis')
             {
-                console.log('{{i}}{{j}}{{fname}}');
                 var beachMarker = new google.maps.Marker({
                     position: {lat: {{i}}, lng: {{j}}},
                     map: map,
-                    //icon: "{% static "images/{{fname}}.png" %}"
-                });
-                console.log(situationalDataTypeColor['{{fname}}']);
-               // var m = L.marker([{{ i }}, {{ j }}],{icon: situationalDataTypeColor['{{fname}}']}).addTo(map);
+                    icon: situationalDataTypeColor[type]
+                });   
             }
         {% endfor %}         
         
