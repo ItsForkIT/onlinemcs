@@ -2,11 +2,15 @@ import os
 f1=open("d1.txt","w")
 x = os.listdir('/mnt/d/DMS/sync')
 for files in x:
-	print files
 	z= str(os.path.getsize('/mnt/d/DMS/sync/' + files))
-	f1.write(z +', ')
-	f1.write(files)
-	f1.write('\n')
+	if files.startswith('Map'):
+		print "NULL";
+	elif files.startswith('NULL'):
+		print "NULL"
+	else:
+		f1.write(z +', ')
+		f1.write(files)
+		f1.write('\n')
 f1.close()
 f1 = open('d1.txt', 'r')
 f2 = open('yourBigFile.txt', 'w')
@@ -52,7 +56,7 @@ firebase = firebase.FirebaseApplication('https://haha-4cf04.firebaseio.com', Non
 data = []
 
 #LEYENDO INFO DEL CSV 
-with open('/mnt/d/offlinemcs/mydata.csv')as csvfile:
+with open('/mnt/d/onlinemcs-master/mydata.csv')as csvfile:
 	read = csv.reader(csvfile)
 	i=0
 	for row in read:
@@ -66,10 +70,26 @@ with open('/mnt/d/offlinemcs/mydata.csv')as csvfile:
 		long1 = float(row[7])
 		datetime = int(row[8])
 		group =int(row[9])
-		name =str(str(type)+'_'+str(tlt)+'_'+str(category)+'_'+str(sender)+'_'+str(reciver)+'_'+str(lat)+'_'+str(long1)+'_'+str(datetime)+'_'+str(group))
-		text="NULL"
-		#dateTime = datetime.datetime.strptime(dateTime, "%Y/%m/%d %H:%M:%S")
-		#print str(dateTime1) + '->' + str(dateTime)
 		i=i+1
-		
-		firebase.put('/onlineMCS',i,{"name": name,"type": type,"tlt": tlt,"category": category,"sender": sender,"reciver": reciver,"lat": lat,"long": long1,"datetime": datetime, "group": group,"size":size})
+		if type=='IMG':
+			exp='.jpg'
+		elif type=='SMS':
+			exp='.txt'
+		elif type=='TXT':
+			exp='.txt'
+		elif type=='VID':
+			exp='.3gp'
+		elif type=='SVS':
+			exp='.3gp'
+		name =str(str(type)+'_'+str(tlt)+'_'+str(category)+'_'+str(sender)+'_'+str(reciver)+'_'+str(lat)+'_'+str(long1)+'_'+str(datetime)+'_'+str(group)+str(exp))
+		if name.startswith('IMG'):
+			content='NULL'
+		elif name.startswith('VID'):
+			content='NULL'
+		elif name.startswith('SVS'):
+			content='NULL'
+		else:
+			f1=open('/mnt/d/DMS/sync/'+str(name))
+			content=f1.read()
+		print name
+		firebase.put('/onlineMCS',i,{"name": name,"type": type,"tlt": tlt,"category": category,"sender": sender,"reciver": reciver,"lat": lat,"long": long1,"datetime": datetime, "group": group,"size":size,"content":content})
