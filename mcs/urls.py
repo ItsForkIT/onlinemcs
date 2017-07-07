@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^sync/$', views.sync, name='sync'),
+    url(r'^twitter/$', views.twitter, name='twitter'),
     url(r'^analysis/graphical$', views.graphicalAnalysis, name='graphicalAnalysis'),
     url(r'^analysis/embs$', views.embs, name='embs'),
 	url(r'^analysis/tables$', views.tabularAnalysis, name='tabularAnalysis'),

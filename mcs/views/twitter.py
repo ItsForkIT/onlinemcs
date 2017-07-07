@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from mcs.models import *
 
-def embs(request):
+def twitter(request):
 	context = {}
-	return render(request, 'mcs/embs.html', context)
+	return render(request, 'mcs/twitter.html', context)
 

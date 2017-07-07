@@ -23,12 +23,10 @@ firebase = firebase.FirebaseApplication('https://haha-4cf04.firebaseio.com', Non
 
 def insertToSpecificTable(filePath, fileType, fileModelObj):
     if(fileType == 'SMS'):
-        fileObj = open(filePath, 'r')
-        message = str(fileObj.read())
+        message = filePath['content']
         return 1
     if(fileType == 'TXT'):
-        fileObj = open(filePath, 'r')
-        message = str(fileObj.read())
+        message = filePath['content']
 
         messageLineSplit = message.split('\n')
         for mesg in messageLineSplit:
