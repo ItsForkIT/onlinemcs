@@ -8,6 +8,8 @@ import logging
 import json
 
 from .utils import manageGis
+# Import database module.
+from firebase import firebase
 
 log = logging.getLogger(__name__)
 
@@ -16,18 +18,15 @@ RELATIVE_PATH_TO_GIS = "static/geojson/"
 RELATIVE_PATH_TO_TARGET_GIS = "static/sampleGeoJson/sample.geojson"
 
 
+firebase = firebase.FirebaseApplication('https://haha-4cf04.firebaseio.com', None)
+
+
 def insertToSpecificTable(filePath, fileType, fileModelObj):
     if(fileType == 'SMS'):
-        fileObj = open(filePath, 'r')
-        message = str(fileObj.read())
-        #sentiment = TextBlob(message).sentiment.polarity
-        # uTxtObj = UnstructuredTXT(Content=message, File=fileModelObj,
-        #                         SentimentPolarity=sentiment)
-        # uTxtObj.save()
+        message = filePath['content']
         return 1
     if(fileType == 'TXT'):
-        fileObj = open(filePath, 'r')
-        message = str(fileObj.read())
+        message = filePath['content']
 
         messageLineSplit = message.split('\n')
         for mesg in messageLineSplit:
@@ -78,14 +77,15 @@ def extractFileInfo(fileName):
 
 
 def checkAndInsert(filePath):
-    fileName = path.basename(filePath)
+    fileName = filePath['name']
+    
     if(fileName.startswith("Map")):
         return 0
     if(not Files.objects.filter(Name=fileName).exists()):
         FileInfo = extractFileInfo(fileName)
         if FileInfo == 0:
             return 0
-        size = path.getsize(filePath)
+        size = filePath['size']
         f = Files(Name=fileName, Type=FileInfo['type'], Size=size,
                   Source=FileInfo['source'],
                   Destination=FileInfo['destination'],
@@ -175,10 +175,17 @@ def index(request):
 
 
 def sync(request):
-    allFilePaths = glob.glob(RELATIVE_PATH_TO_SYNC)
+	result = firebase.get('/onlineMCS', None)
 
-    i = 0
-    for filePath in allFilePaths:
-        i += checkAndInsert(filePath)
-    manageGis(allFilePaths, RELATIVE_PATH_TO_GIS, RELATIVE_PATH_TO_TARGET_GIS)
-    return redirect(index)
+	for items in range(1,len(result)):
+		print result[items]['name']
+		checkAndInsert(result[items])
+
+	# allFilePaths = glob.glob(RELATIVE_PATH_TO_SYNC)
+
+	# i = 0
+	# for filePath in allFilePaths:
+	# 	print filePath
+	# 	i += checkAndInsert(filePath)
+	#manageGis(allFilePaths, RELATIVE_PATH_TO_GIS, RELATIVE_PATH_TO_TARGET_GIS)
+	return redirect(index)

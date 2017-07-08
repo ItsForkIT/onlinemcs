@@ -11,12 +11,6 @@ def graphicalAnalysis(request):
 	context['countAUD'] = Files.objects.filter(Type='AUD').count()
 	context['DateTime'] = Files.objects.values_list('DateTime', flat=True)
 
-	context['latlong'] = Files.objects.values('lat','lon')
-	district = []
-	for latlong in context['latlong']:
-		district.append(latlongCalc(latlong['lat'],latlong['lon']))
-			
-	context['latlongFinal'] = dict((x,district.count(x)) for x in set(district))	
 	
 	
 	context['Health'] =  Health.objects.values_list()
@@ -76,28 +70,3 @@ def graphicalAnalysis(request):
 		
 
 	return render(request, 'mcs/graphical.html', context)
-def latlongCalc(lati,longi):
-	f = open('../offlinemcs/static/map/district.txt','r')
-	
-	x = f.readline()
-	y = x.split(',')
-	olat = y[2][2:-3]
-	olong = y[3][2:-3]
-	minLat = 100
-	minLong = 100
-	i = 0 
-	while i<942:
-		x = f.readline()
-		y = x.split(',')
-		olat = y[2][2:-3]
-		olong = y[3][2:-3]
-
-		if((abs(lati - float(olat)) < minLat) and (abs(longi - float(olong)) < minLong)):
-			#print 'True:' + str(abs(lati-float(olat))) + '<' + str(minLat)
-			#print 'Lat: '+ str(minLat) + 'Long:'+ str(minLong) + 'City:' + city
-			minLat = abs(lati - float(olat))
-			minLong = abs(longi - float(olong))
-			city = y[1].replace("'","")
-		i = i + 1
-	
-	return city

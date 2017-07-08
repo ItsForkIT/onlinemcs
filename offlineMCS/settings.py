@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
+from decouple import config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,11 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5di&8=tg7k^o$f9wujgp*(o!x5u=!dq$uz8i1g)zf0m57n%qty'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+#DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = ['*']
 
 
@@ -83,10 +85,20 @@ WSGI_APPLICATION = 'offlineMCS.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
+   # 'default': dj_database_url.config(default='postgres://localhost:5432/postgres_db_name'),
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
+   # 'default': {
+   #      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+   #      'NAME': 'mcsdb',
+   #      'USER': 'hridoy',
+   #      'PASSWORD': ' ',
+   #  }
 }
 
 
@@ -116,53 +128,54 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
-
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # Logging module added
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format' : "[%(asctime)s],%(levelname)s,[%(name)s:%(lineno)s],%(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
-        },
-    },
-    'handlers': {
-        'null': {
-            'level':'DEBUG',
-            'class':'logging.NullHandler',
-        },
-        'logfile': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': "../offlinemcs/offlineMCS_log.csv",
-            'maxBytes': 50000,
-            'backupCount': 2,
-            'formatter': 'standard',
-        },
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
-            'formatter': 'standard'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers':['console'],
-            'propagate': True,
-            'level':'WARN',
-        },
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'mcs': {
-            'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
-        },
-    }
-}
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': True,
+#     'formatters': {
+#         'standard': {
+#             'format' : "[%(asctime)s],%(levelname)s,[%(name)s:%(lineno)s],%(message)s",
+#             'datefmt' : "%d/%b/%Y %H:%M:%S"
+#         },
+#     },
+#     'handlers': {
+#         'null': {
+#             'level':'DEBUG',
+#             'class':'logging.NullHandler',
+#         },
+#         'logfile': {
+#             'level':'DEBUG',
+#             'class':'logging.handlers.RotatingFileHandler',
+#             'filename': "../offlinemcs/offlineMCS_log.csv",
+#             'maxBytes': 50000,
+#             'backupCount': 2,
+#             'formatter': 'standard',
+#         },
+#         'console':{
+#             'level':'INFO',
+#             'class':'logging.StreamHandler',
+#             'formatter': 'standard'
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers':['console'],
+#             'propagate': True,
+#             'level':'WARN',
+#         },
+#         'django.db.backends': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#         'mcs': {
+#             'handlers': ['console', 'logfile'],
+#             'level': 'DEBUG',
+#         },
+#     }
+# }
 '''
 CACHES = {
    'default': {
