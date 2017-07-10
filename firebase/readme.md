@@ -1,3 +1,3 @@
-##STEP TO START##
-1 : Set the path in path file
-2 : Set '0' in 'lastvalue.txt' for the first time run
+## How To
+* Set the absolute path of the 'sync' folder in 'path.txt'. 
+* Set '0' in 'lastvalue.txt' for the first time run.
