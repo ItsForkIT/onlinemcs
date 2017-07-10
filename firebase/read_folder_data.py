@@ -1,11 +1,14 @@
 import os
+
 p = open("path.txt","r")
 path = p.read()
 f1 = open("d1.txt","w") #read the folder info and store the name
 x = os.listdir(path)
 for files in x:
 	z= str(os.path.getsize(path + files))
-	if files.startswith('Map'):
+	if files.startswith('osm'):
+		print "NULL"
+	elif files.startswith('Map'):
 		print "NULL";
 	elif files.startswith('NULL'):
 		print "NULL"
